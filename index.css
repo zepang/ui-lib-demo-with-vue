@@ -1,0 +1,42 @@
+div .lai-switch__small.lai-switch__checked {
+  background-color: #7983ff;
+}
+div .lai-switch__small.lai-switch__checked .lai-switch-label:after {
+  transform: translateX(16px);
+}
+div .lai-switch__small .lai-switch-label {
+  width: 28px;
+  height: 16px;
+}
+div .lai-switch__small .lai-switch-label:after {
+  width: 14px;
+  height: 14px;
+}
+div .lai-switch__middle.lai-switch__checked {
+  background-color: #7983ff;
+}
+div .lai-switch__middle.lai-switch__checked .lai-switch-label:after {
+  transform: translateX(22px);
+}
+div .lai-switch__middle .lai-switch-label {
+  width: 44px;
+  height: 22px;
+}
+div .lai-switch__middle .lai-switch-label:after {
+  width: 20px;
+  height: 20px;
+}
+div .lai-switch__large.lai-switch__checked {
+  background-color: #7983ff;
+}
+div .lai-switch__large.lai-switch__checked .lai-switch-label:after {
+  transform: translateX(22px);
+}
+div .lai-switch__large .lai-switch-label {
+  width: 56px;
+  height: 22px;
+}
+div .lai-switch__large .lai-switch-label:after {
+  width: 20px;
+  height: 20px;
+}

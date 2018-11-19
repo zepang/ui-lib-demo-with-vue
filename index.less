@@ -1,0 +1,48 @@
+@prefix: lai;
+@sizeList: small, middle, large;
+
+@large-width: 56px;
+@large-height: 22px;
+@middle-width: 44px;
+@middle-height: 22px;
+@small-width: 28px;
+@small-height: 16px;
+
+.loop(@i) when (@i <= length(@sizeList)) {
+  @type: extract(@sizeList, @i);
+  @width: "@{type}-width";
+  @height: "@{type}-height";
+  .@{prefix}-switch__@{type} {
+    &.@{prefix}-switch__checked {
+      background-color: #7983ff;
+      .@{prefix}-switch-label:after {
+        transform: translateX(@@height);
+      }
+    }
+    .@{prefix}-switch-label {
+      width: @@width;
+      height: @@height;
+      &:after {
+        width: @@height - 2px;
+        height: @@height - 2px;
+      }
+    }
+  }
+  .loop((@i + 1));
+}
+
+div {
+  .loop(1);
+}
+
+// .loop(@i) when (@i < length(@sizeList)) {
+//   .switch-label__extract(@sizeList, @i) {
+//     width: "{extract(@sizeList, @i)}-width";
+//     height: "{extract(@sizeList, @i)}-height";
+//   }
+//   .loop((@i+1))
+// }
+//
+// div {
+//   .loop(0)
+// }
