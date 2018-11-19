@@ -1,11 +1,11 @@
 // 组件
 import components from './components'
 // 指令
-const directives = {}
+import directives from './directives'
 // 过滤器
 const filters = {}
 // 实列方法
-const prototypes = {}
+import prototypes from './prototypes'
 
 export default {
   install (Vue, options) {
@@ -23,7 +23,8 @@ export default {
     }
     // 绑定实力方法
     for (let key in prototypes) {
-      Vue.prototype[key] = prototypes[key]
+      console.log(prototypes[key])
+      Vue.prototype[`$${key}`] = prototypes[key]
     }
   }
 }

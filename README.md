@@ -356,3 +356,167 @@ devServer: {
 }
 ~~~
 最快的还是直接在 webpack-dev-server --hot 。
+
+现在的配置是可以满足我们的开发环境的，我原本考虑是不是把webpack的配置这一块先搞定，后面想了一下，还是决定一边写组件，一遍完善webpack配置，这样的话才能够看到webpack在开发中发挥的具体作用。
+
+接下来，我们写一个 loading 组件，新建 src/components/loading.vue
+
+~~~v
+<template>
+  <div :class="wrapperClass" ref="loading">
+    <div :class="loadingClass">
+      <div :class="iconClass"></div>
+      <p :class="textClass">正在加载中</p>
+    </div>
+  </div>
+</template>
+
+<script>
+const prefix = 'lai'
+export default {
+  data () {
+    return {
+
+    }
+  },
+  computed: {
+    wrapperClass () {
+      return `${prefix}-loading__wrapper`
+    },
+    loadingClass () {
+      return `${prefix}-loading`
+    },
+    iconClass () {
+      return `${prefix}-loading__icon`
+    },
+    textClass () {
+      return `${prefix}-loading__text`
+    }
+  },
+  mounted () {
+    this.initStyle()
+  },
+  methods: {
+    initStyle () {
+      this.$refs.loading.parentNode.style.position = 'relative'
+    }
+  }
+}
+</script>
+
+
+<style lang="less" scoped>
+@prefix: lai;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.@{prefix}-loading__wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  .@{prefix}-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    .@{prefix}-loading__icon {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #7983ff;
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+    }
+    .@{prefix}-loading__text {
+      color: #000;
+    }
+  }
+}
+</style>
+~~~
+
+然后在页面上直接使用，发现样式没有什么问题，接下里完善下基本的 js 逻辑，其实作为组件使用现在基本是可以用的，但是，大多数场景下，我们都是将 loading 作为指令和或者实例方法使用。先将 loading 组件修改成指令的使用方式。
+
+新建 src/directives/loading.js
+~~~js
+import Vue from 'vue'
+import LoadingComponent from '../components/loading.vue'
+const Loading = Vue.extend(LoadingComponent)
+
+export default {
+  inserted (el, binding, vnode, oldVnode) {
+    const child = document.createElement('div')
+    const loadingText = el.getAttribute('loading-text')
+    if (binding.arg === 'fullPage') {
+      document.body.appendChild(child)
+    } else {
+      el.appendChild(child)
+    }
+    const loading = new Loading({
+      el: child
+    })
+    if (loadingText) {
+      loading.loadingText = loadingText
+    }
+    el.loading = loading
+  },
+  update (el, binding, vnode, oldVnode) {
+    // 更新loading组件的值
+    el.loading.isShow = binding.value
+  }
+}
+~~~
+大概解释一下上边的代码，首先是用 Vue 的 extend 方法生成一个 Loading 的子类，然后生成一个 loading实例，并通过 $mount 方法获取到当前 实例的 dom，最后将 dom push 进入容器就好了。
+
+上边就是一个非常简单的指令，关于指令的其他内容比如钩子函数，参数这些，可以去官网查看[文档](https://cn.vuejs.org/v2/guide/custom-directive.html)
+
+接下来完成 loading 的实例方法
+
+新建 src/prototypes/loading.js
+
+~~~js
+import Vue from 'vue'
+import LoadingComponent from '../components/loading.vue'
+const Loading = Vue.extend(LoadingComponent)
+
+const loading = (options) => {
+  if (Vue.prototype.loadingComponent && Vue.prototype.loadingComponent.$el) {
+    return Vue.prototype.loadingComponent
+  }
+  const child = document.createElement('div')
+  if (options.el) {
+    if (options.el.nodeType === 1) {
+      options.el.appendChild(child)
+    } else {
+      document.querySelector(el).appendChild(child)
+    }
+  } else {
+    document.body.appendChild(child)
+  }
+  const loading = new Loading({
+    el: child,
+    data: options
+  })
+  Vue.prototype.loadingComponent = loading
+  return loading
+}
+
+export default loading
+~~~
+
+
+
+
+
+
