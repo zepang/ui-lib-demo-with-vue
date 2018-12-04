@@ -518,6 +518,244 @@ export default loading
 > Thu Nov 22 19:47:06 DST 2018
   最近这几天请假了一天，上班工作紧，恐怕没时间写。口怕，不知道这次有没有毅力，坚持！
 
+# select 组件
+在写 select 组件之前，我们先引入了一下 iconfont，用来解决 icon 的需求，所以为了能够使用字体图标的字体文件，我们需要给 webpack 配置了一下 url-loader，我们找到 url-loader文档， 当前最新的版本是 url-loader@1.1.2，我们发现url-loader当前的选项就三个 limit fallback mimetype(不设置的话会根据文件拓展名自己设置)，我们为了方便之后可能需要解决图片的问题，也给配置上 file-loader。设置 limit 为 1mb，然后在 fallback 中配置 file-loader，如果超过 1mb 的文件就会使用 file-loader 来处理，并且打包后会存在images文件夹下面。接着配置一下 file-loader 的输出文件名字和路径。
+~~~js
+{
+  test: /\.(woff2?|eot|ttf|otf|png|jpg|jpeg|gif|svg)(\?.*)?$/,
+  loader: 'url-loader',
+  options: {
+    limit: 10000,
+    fallback: {
+      loader: 'file-loader',
+      options: {
+        name: '[name][hash:7].[ext]',
+        outputPath: 'images/'
+      }
+    }
+  }
+}
+~~~
+另外，我们顺便给package.json配置下边的命令：
+~~~json
+"clean": "rimraf dist/*",
+"build": "npm run clean && webpack --config webpack.config.js"
+~~~
+最后，把上边依赖的包都安装上：
+~~~
+npm install rimraf url-loader file-loader --save-dev
+npm run build
+tree dist
+
+dist/
+├── app0e79bee6.bundle.js
+├── images
+│   └── cache_user_icon320332b.jpg
+└── index.html
+~~~
+
+好的，我们接着运行开发模式进行 select 下拉组件的开发。
+
+一个简单的选择框就两部分，一部分是input的输入框（这个输入框甚至不需要输入），一部分是下拉的列表。
+~~~html
+<template>
+  <div class="lai-select__wrapper" style="width: 200px">
+    <div class="lai-select__selection" @click="isShow = !isShow">
+      <span class="lai-select__placeholder">请选择</span>
+      <i class="iconfont icon-previewleft lai-select__icon"></i>
+    </div>
+    <div class="lai-select__options" v-show="isShow">
+      <div class="lai-select__option">选项1</div>
+      <div class="lai-select__option">选项2</div>
+      <div class="lai-select__option">选项3</div>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data () {
+    return {
+      isShow: false
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.lai-select__wrapper {
+  width: 100%;
+  position: relative;
+  .lai-select__selection {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 30px;
+    padding: 0 10px;
+    position: relative;
+    border: 1px solid #dcdee2;
+    font-size: 12px;
+    &:focus {
+      border: 1px solid red;
+    }
+    .lai-select__placeholder {
+      line-height: 30px;
+      color: #c5c8ce;
+    }
+    .lai-select__icon {
+      display: inline-block;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%) rotateZ(-90deg);
+      color: #c5c8ce;
+    }
+  }
+  .lai-select__options {
+    width: 100%;
+    margin-top: 2px;
+    padding: 4px 0;
+    box-sizing: border-box;
+    box-shadow: 0px 1px 8px -2px rgba(0, 0, 0, 0.2);
+    user-select: none;
+    .lai-select__option {
+      padding: 7px 10px;
+      font-size: 12px;
+      &:hover {
+        background-color: #f3f3f3;
+      }
+    }
+  }
+}
+</style>
+~~~
+上边的代码足够完成一个普通的select的样式，我们通过点击 selection 可以实现下来菜单的显示隐藏，接下里我们加上部分的逻辑。
+~~~html
+<template>
+  <div class="lai-select__wrapper" style="width: 200px">
+    <div class="lai-select__selection" @click="isShow = !isShow">
+      <span class="lai-select__placeholder">{{selected.label || selected || '请选择'}}</span>
+      <i class="iconfont icon-previewleft lai-select__icon"></i>
+    </div>
+    <div class="lai-select__options" v-show="isShow">
+      <div 
+        class="lai-select__option" 
+        v-for="(option, index) in options" 
+        :key="index"
+        @click="handleSelected(option)">
+          {{option.label}}
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data () {
+    return {
+      isShow: false,
+      selected: this.value
+    }
+  },
+  props: {
+    value: {
+      type: [Array,String,Number],
+      default: ''
+    },
+    options: {
+      type: Array,
+      default: () => []
+    }
+  },
+  beforeMount () {
+    // 初始化 selected 的值
+    this.getSelected()
+  },
+  methods: {
+    getSelected () {
+      if (this.options.toString().indexOf('[object Object]') !== -1) {
+        this.selected = this.options.find(({value}) => value === this.value)
+      } else {
+        this.selected = this.value
+      }
+    },
+    handleSelected (selected) {
+      let value 
+      if (typeof selected === 'object') {
+        value = selected.value
+      } else {
+        value = selected
+      }
+      this.selected = selected
+      this.$emit('input', value)
+      this.$emit('change', value)
+      this.isShow = false
+    }
+  },
+  watch: {
+    value (val) {
+      this.getSelected()
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.lai-select__wrapper {
+  width: 100%;
+  position: relative;
+  .lai-select__selection {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 30px;
+    padding: 0 10px;
+    position: relative;
+    border: 1px solid #dcdee2;
+    font-size: 12px;
+    &:focus {
+      border: 1px solid red;
+    }
+    .lai-select__placeholder {
+      line-height: 30px;
+      color: #c5c8ce;
+    }
+    .lai-select__icon {
+      display: inline-block;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%) rotateZ(-90deg);
+      color: #c5c8ce;
+    }
+  }
+  .lai-select__options {
+    width: 100%;
+    margin-top: 2px;
+    padding: 4px 0;
+    box-sizing: border-box;
+    box-shadow: 0px 1px 8px -2px rgba(0, 0, 0, 0.2);
+    user-select: none;
+    .lai-select__option {
+      padding: 7px 10px;
+      font-size: 12px;
+      &:hover {
+        background-color: #f3f3f3;
+      }
+    }
+  }
+}
+</style>
+~~~
+现在我们就可以通过下边的方式调用这个组件：
+~~~html
+<lai-select v-model="selected" :options="options" @change="change"></lai-select>
+~~~
+这样一来我们就实现了一个常见的单选的 select 组件。
+
+接下来我们来实现一个多选的 select 组件：
+
+
+
+
 
 
 

@@ -1,7 +1,9 @@
-import Switch from './switch.vue'
-import Loading from './loading.vue'
+import Switch from './switch'
+import Loading from './loading'
+import Select from './select'
 
 export default {
   Switch,
-  Loading
+  Loading,
+  Select
 }

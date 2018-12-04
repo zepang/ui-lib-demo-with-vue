@@ -12,11 +12,12 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name][hash:8].bundle.js'
   },
-  // resolve: {
-  //   alias: {
-  //     'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack
-  //   }
-  // },
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack
+    },
+    extensions: ['.js', '.vue']
+  },
   module: {
     rules: [
       {
@@ -38,6 +39,20 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env']
+          }
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf|png|jpg|jpeg|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          fallback: {
+            loader: 'file-loader',
+            options: {
+              name: '[name][hash:7].[ext]',
+              outputPath: 'images/'
+            }
           }
         }
       }
