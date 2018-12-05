@@ -7,6 +7,8 @@ const filters = {}
 // 实列方法
 import prototypes from './prototypes'
 
+import { camlToParam } from './utils'
+
 export default {
   install (Vue, options) {
     // 注册组件
@@ -15,7 +17,7 @@ export default {
     }
     // 注册指令
     for (let key in directives) {
-      Vue.directive(key, directives[key])
+      Vue.directive(camlToParam(key), directives[key])
     }
     // 注册过滤器
     for (let key in filters) {

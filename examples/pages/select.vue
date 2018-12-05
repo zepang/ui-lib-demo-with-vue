@@ -1,6 +1,7 @@
 <template>
   <div>
-    <lai-select v-model="selected" :options="options" @change="change"></lai-select>
+    <lai-select v-model="selected1" :options="options" @change="change"></lai-select>
+    <lai-select v-model="selected2" :options="options" @change="change" :filterable="true"></lai-select>
     <!-- <lai-select v-model="selected" :multiple="true" :options="options" @change="change"></lai-select> -->
   </div>
 </template>
@@ -8,7 +9,8 @@
 export default {
   data () {
     return {
-      selected: 1,
+      selected1: '',
+      selected2: 1,
       options: [
         {
           label: '选项1',
