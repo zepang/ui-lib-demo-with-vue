@@ -1,0 +1,82 @@
+<template>
+  <component is="button" :class="btnCls" :disabled="disabled">确认</component>
+</template>
+<script>
+export default {
+  props: {
+    size: {
+      validator: val => {
+        return ['large', 'middle', 'small'].indexOf(val) !== -1
+      },
+      default: 'middle'
+    },
+    type: {
+      validator: val => {
+        return ['ok', 'cancel'].indexOf(val) !== -1
+      },
+      default: 'ok'
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    radius: {
+      type: ''
+    }
+  },
+  computed: {
+    btnCls () {
+      return ['lai-btn', `lai-btn__${this.type}`, `lai-btn__${this.size}`]
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.lai-btn {
+  display: inline-block;
+  appearance: none;
+  border: 0px;
+  box-sizing: border-box;
+  line-height: 1;
+  font-weight: normal;
+  letter-spacing: 0px;
+  cursor: pointer;
+  &[disable] {
+    color: #999999 !important;
+    background-color: #f5f5f5 !important;
+    box-shadow: 0px 0px 1px #cccccc;
+    cursor: not-allowed;
+  }
+  &:focus {
+    outline: none;
+  }
+  &.lai-btn__ok {
+    background-color: #097cff;
+    color: #ffffff;
+    &:hover {
+      background-color: #0966ff;
+    }
+  }
+  &.lai-btn__cancel {
+    background-color: #eeeeee;
+    color: #333333;
+    &:hover {
+      background-color: #eaf6fe;
+      color: #0966ff;
+    }
+  }
+  &.lai-btn__large {
+    padding: 14px 56px;
+    font-size: 14px;
+  }
+  &.lai-btn__middle {
+    padding: 11px 31px;
+    font-size: 14px;
+  }
+  &.lai-btn__small {
+    font-size: 12px;
+    padding: 8px 18px;
+  }
+}
+</style>
