@@ -25,7 +25,6 @@ export default {
     }
     // 绑定实力方法
     for (let key in prototypes) {
-      console.log(prototypes[key])
       Vue.prototype[`$${key}`] = prototypes[key]
     }
   }
