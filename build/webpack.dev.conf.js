@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   mode: 'development',
+  devtool: 'eval-source-map',
   entry: {
     app: './examples/index.js'
   },
@@ -23,6 +24,13 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader'
+      },
+      {
+        test: /\.less$/,
+        use: [
+          'vue-style-loader',
+          'css-loader'
+        ]
       },
       {
         test: /\.less$/,
@@ -62,17 +70,20 @@ module.exports = {
     // 最新的 vue-loader（15.0以后吧） 需要引入这个插件
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
-      title: 'LaiUI',
-      template: path.resolve(__dirname, 'index.html')
+      title: 'LAIUI',
+      template: 'index.html'
     }),
-    // 热重载插件 配合 devServer.hot
+    // 热重载插件 
     new webpack.HotModuleReplacementPlugin()
   ],
-  devServer: {
-    hot: true,
-    contentBase: path.join(__dirname, "dist"),
-    compress: true,
-    port: 9000,
-    quiet: true
-  }
+  /**
+   * 如果使用的是 webpack-dev-server 可以启动西面的配置
+   */
+  // devServer: {
+  //   hot: true,
+  //   contentBase: path.join(__dirname, "dist"),
+  //   compress: true,
+  //   port: 9000,
+  //   quiet: true
+  // }
 }
