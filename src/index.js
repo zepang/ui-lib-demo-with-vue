@@ -13,7 +13,7 @@ export default {
   install (Vue, options) {
     // 注册组件
     for (let key in components) {
-      Vue.component(`lai-${key.toLowerCase()}`, components[key])
+      Vue.component(`lai${camlToParam(key)}`, components[key])
     }
     // 注册指令
     for (let key in directives) {
