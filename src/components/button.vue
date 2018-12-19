@@ -39,7 +39,7 @@ button.lai-btn {
   background-color: transparent; 
   color: inherit; 
   font: inherit; 
-  cursor: pointer; 
+  cursor: pointer;  
 }
 .lai-btn {
   display: inline-block;

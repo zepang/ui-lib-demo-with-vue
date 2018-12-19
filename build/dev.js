@@ -4,13 +4,31 @@ const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const portfinder = require('portfinder')
 const chalk = require('chalk')
+const ora = require('ora')
 
 const app = express()
 const config = require('./webpack.dev.conf.js')
 const compiler = webpack(config)
+let defaultPort = 8080
 
-app.use(webpackDevMiddleware(compiler))
-app.use(webpackHotMiddleware(compiler))
+const spinner = ora('Compiling for development...').start()
+const instance = webpackDevMiddleware(compiler, {
+  hot: true,
+  compress: true,
+  watchOptions: {
+    poll: true
+  },
+  logLevel: 'silent'
+})
+instance.waitUntilValid(() => {
+  spinner.stop()
+  console.log(chalk.green('you application is running on http://localhost:' + defaultPort)) 
+})
+app.use(instance)
+app.use(webpackHotMiddleware(compiler, {
+  log: false,
+  heartbeat: 2000
+}))
 
 portfinder.getPort(function (error, port) {
   if (error) {
@@ -18,7 +36,7 @@ portfinder.getPort(function (error, port) {
   } else {
     process.env.PORT = port
     app.listen(port, function () {
-      console.log(chalk.green('you application is running on http://localhost:' + port))
+      defaultPort = port
     })
   }
 })

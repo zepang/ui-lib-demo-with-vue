@@ -27,8 +27,7 @@ export default {
   },
   methods: {
     initList () {
-      let curMonthDayCount = util.getDayCountOfMonth(new Date())
-      console.log(curMonthDayCount)
+      
     }
   }
 }
