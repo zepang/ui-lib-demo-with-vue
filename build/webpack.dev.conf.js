@@ -3,12 +3,19 @@ const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+var ansiColors = {
+  red: '00FF00' // note the lack of "#"
+}
+var overlayStyles = {
+  color: '#FF0000' // note the inclusion of "#" (these options would be the equivalent of div.style[option] = value)
+}
+var hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true&ansiColors=' + encodeURIComponent(JSON.stringify(ansiColors)) + '&overlayStyles=' + encodeURIComponent(JSON.stringify(overlayStyles));
 
 module.exports = {
   mode: 'development',
   devtool: 'eval-source-map',
   entry: {
-    app: './examples/index.js'
+    app: [hotMiddlewareScript, './examples/index.js']
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
