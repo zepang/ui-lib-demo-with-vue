@@ -8,7 +8,7 @@
     :style="{borderRadius: radius}" 
     placeholder="请选择日期"
     type="text" readonly>
-    <span v-if="clearable" class="error-icon" @click.stop="clearTime">
+    <span v-if="clearable && time" class="error-icon" @click.stop="clearTime">
       <i class="iconfont icon-error"></i>
     </span>
   </div>

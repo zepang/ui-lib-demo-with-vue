@@ -1,8 +1,8 @@
 <template>
   <div class="date-picker__wrapper">
-    <date-picker-input radius="19px" :clearable="true" @click.native="isShow = !isShow" v-model="time"></date-picker-input>
+    <date-picker-input radius="19px" :clearable="true" @click.native="isShow = true" v-model="time"></date-picker-input>
     <transition name="fade">
-      <base-calendar v-if="isShow" @on-change="setTime"></base-calendar>
+      <base-calendar v-if="isShow" @on-change="setTime" v-click-outside="hideSelf"></base-calendar>
     </transition>
   </div>
 </template>
@@ -11,6 +11,7 @@
 import dayjs from 'dayjs'
 import BaseCalendar from './components/BaseCalendar'
 import DatePickerInput from './components/DatePickerInput'
+import clickOutside from '../../directives/click-outside'
 export default {
   data () {
     return {
@@ -18,11 +19,17 @@ export default {
       time: dayjs()
     }
   },
+  directives: {
+    'click-outside': clickOutside
+  },
   components: {
     BaseCalendar,
     DatePickerInput
   },
   methods: {
+    hideSelf () {
+      this.isShow = false
+    },
     setTime (value) {
       this.time = value.date
       this.$nextTick(() => {
