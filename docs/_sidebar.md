@@ -4,3 +4,4 @@
   - [**Switch 开关**](switch)
   - [**Loading 加载提示**](loading)
   - [**Select 下拉选择**](select)
+  - [**日期选择器**](data-picker)
