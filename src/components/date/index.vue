@@ -1,6 +1,6 @@
 <template>
   <div class="date-picker__wrapper">
-    <date-picker-input radius="19px" @click.native="isShow = !isShow" v-model="time"></date-picker-input>
+    <date-picker-input radius="19px" :clearable="true" @click.native="isShow = !isShow" v-model="time"></date-picker-input>
     <transition name="fade">
       <base-calendar v-if="isShow" @on-change="setTime"></base-calendar>
     </transition>
