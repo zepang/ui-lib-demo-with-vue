@@ -93,8 +93,6 @@ export default {
 
 <style lang="less" scoped>
 .base-calendar__wrapper {
-  position: absolute;
-  top: 110%;
   width: 280px;
   padding: 20px;
   box-shadow: 0px 1px 10px 0px rgba(22, 24, 39, 0.08);

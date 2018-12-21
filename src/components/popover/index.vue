@@ -1,8 +1,7 @@
 <template>
-  <div class="popover__wrapper">
-    <div class="reference">
+  <div class="popover__wrapper" :style="{width: width}">
+    <div class="reference" @click="isShow = true">
       <slot name="reference">
-      <button>12233</button>
       </slot>
     </div>
     <transition name="fade">
@@ -15,15 +14,36 @@
 
 <script>
 export default {
+  data () {
+    return {
+      isShow: false
+    }
+  },
   props: {
+    width: {
+      type: String,
+      default: '200px'
+    },
     content: {
       type: [String, Number],
       default: 'content'
+    }
+  },
+  methods: {
+    hideSelf () {
+      this.isShow = false
     }
   }
 }
 </script>
 <style lang="less" scoped>
+.popover__wrapper {
+  position: relative;
+  .content {
+    position: absolute;
+    top: 110%;
+  }
+}
 .fade-enter, .fade-leave-to {
   opacity: 0;
   transform: translateY(20px);
