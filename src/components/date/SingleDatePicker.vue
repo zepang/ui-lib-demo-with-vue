@@ -1,5 +1,5 @@
 <template>
-  <popover width="200px">
+  <popover width="200px" ref="popover">
     <date-picker-input slot="reference" radius="19px" :clearable="true" v-model="time"></date-picker-input>
     <base-calendar slot="content" @on-change="setTime" v-click-outside="hideSelf"></base-calendar>
   </popover>
@@ -34,7 +34,7 @@ export default {
     setTime (value) {
       this.time = value.date
       this.$nextTick(() => {
-        this.isShow = false
+        this.$refs.popover.hide()
       })
     }
   }

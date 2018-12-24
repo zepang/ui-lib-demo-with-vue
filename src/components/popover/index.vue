@@ -5,7 +5,7 @@
       </slot>
     </div>
     <transition name="fade">
-      <div class="content" v-if="isShow" v-click-outside="hideSelf">
+      <div class="content" v-if="isShow" v-click-outside="hide">
         <slot name="content">{{content}}</slot>
       </div>
     </transition>
@@ -30,7 +30,7 @@ export default {
     }
   },
   methods: {
-    hideSelf () {
+    hide () {
       this.isShow = false
     }
   }
