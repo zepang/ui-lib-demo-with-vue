@@ -1,19 +1,37 @@
 <template>
-  <component :is="type"></component>
-  <!-- <single-date-picker></single-date-picker> -->
+  <component :is="datePickerComponent"></component>
 </template>
 
 <script>
 import SingleDatePicker from './SingleDatePicker'
+import RangeDatePicker from './RangeDatePicker'
 export default {
+  provide() {
+    return {...this.$props}
+  },
   props: {
     type: {
       type: String,
-      default: 'SingleDatePicker'
+      default: 'date'
+    },
+    format: {
+      type: String,
+      default: 'YYYY-MM-DD'
+    }
+  },
+  computed: {
+    datePickerComponent () {
+      switch (this.type) {
+        case 'dateRange':
+          return 'RangeDatePicker'
+        default:
+          return 'SingleDatePicker'
+      }
     }
   },
   components: {
-    SingleDatePicker
+    SingleDatePicker,
+    RangeDatePicker
   }
 }
 </script>

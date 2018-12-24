@@ -53,7 +53,7 @@ export default {
 </script>
 
 
-<style lang="less">
+<style lang="less" scoped>
 .date-picker__input {
   position: relative;
   width: 100%;

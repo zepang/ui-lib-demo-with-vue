@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <img class="avatar" src="../src/assets/images/cache_user_icon.jpg" alt=""> -->
     <router-view></router-view>
-    <lai-date-picker></lai-date-picker>
+    <lai-date-picker format="YYYY-MM-DD" type="dateRange"></lai-date-picker>
   </div>
 </template>
 

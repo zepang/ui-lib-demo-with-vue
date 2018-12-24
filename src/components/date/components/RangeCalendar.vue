@@ -14,6 +14,7 @@
         class="day"
         v-for="item in calendar" 
         @click="getTime(item)" 
+        @mouseenter="changeHover(item)"
         :class="[{
           'selected': item.isSelected,
           'hover': item.isHover,
@@ -22,6 +23,10 @@
         <span>{{item.date.date()}}</span>
       </li>
     </ul>
+    <div class="btn-groups">
+      <button @click="selectRangeDate">确定</button>
+      <button>取消</button>
+    </div>
   </div>
 </template>
 <script>
@@ -29,6 +34,8 @@ import dayjs from 'dayjs'
 export default {
   data () {
     return {
+      startTime: null,
+      endTime: null,
       selectedDate: null,
       dayjs: dayjs,
       calendar: []
@@ -84,9 +91,61 @@ export default {
     },
     getTime (value) {
       if (value.isDisabled) return 
-      this.selectedDate = value.date
-      this.$emit('on-change', value)
+      let dateObj = this.calendar.find(item => item.date === value.date)
+      dateObj.isSelected = true
+
+      if (this.startTime && this.startTime.isBefore(dateObj.date)) {
+        this.endTime = dateObj.date
+
+      } else if (this.startTime && this.startTime.isAfter(dateObj.date)) {
+        this.endTime = this.startTime
+        this.startTime = dateObj.date
+      } else if (this.endTime && this.endTime.isBefore(dateObj.date)) {
+        this.startTime = this.endTime
+        this.endTime = dateObj.date
+      } else if (this.endTime && this.endTime.isAfter(dateObj.date)) {
+        this.startTime = dateObj.date
+      } else {
+        this.startTime = dateObj.date
+      }
+
+      this.calendar = this.calendar.map(item => {
+        item.isSelected = false
+        return item
+      })
+
+      this.startTime && (this.calendar.find(item => item.date === this.startTime).isSelected = true)
+      this.endTime && (this.calendar.find(item => item.date === this.endTime).isSelected = true)
+
+      console.log('startTime:', this.startTime && this.startTime);
+      console.log('endTime:', this.endTime && this.endTime);
     },
+    changeHover (hoverDate) {
+      console.log('mouseenter');
+      if (!this.startTime || hoverDate.isDisabled) return
+      let prev = this.startTime
+      let next = hoverDate.date
+      if (this.startTime.isAfter(hoverDate.date)) {
+        prev = hoverDate.date
+        next = this.startTime
+      }
+
+      this.calendar = this.calendar.map(item => {
+        // console.log(item, prev, next)
+        if (item.date.isAfter(prev) && item.date.isBefore(next)) {
+          item.isHover = true
+          console.log(item)
+        } else {
+          item.isHover = false
+        }
+        return item
+      })
+    },
+    selectRangeDate () {
+      if (!this.startTime && !this.endTime) return 
+      console.log([this.startTime.format('YYYY-MM-DD'), this.endTime.format('YYYY-MM-DD')])
+      // this.$emit('on-change', [this.startTime.format('YYYY-MM-DD'), this.endTime.format('YYYY-MM-DD')])
+    }
   }
 }
 </script>
@@ -125,6 +184,10 @@ ul li {
     background-color: #eeeeee;
     cursor: pointer;
   }
+  &.hover:not(.disabled) {
+    background-color: #eeeeee;
+    cursor: pointer;
+  }
   &.disabled:hover {
     cursor: not-allowed;
   }
@@ -146,6 +209,14 @@ li.day.selected {
 
 li.day.disabled {
   color: #c4c1c1;
+}
+
+.btn-groups {
+  text-align: right;
+  button {
+    display: inline-block;
+    margin-left: 10px;
+  }
 }
 
 </style>

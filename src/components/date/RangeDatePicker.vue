@@ -1,15 +1,15 @@
 <template>
-  <popover width="200px" ref="popover">
-    <date-picker-input slot="reference" radius="19px" :clearable="true" v-model="time"></date-picker-input>
-    <base-calendar slot="content" @on-change="setTime" v-click-outside="hideSelf"></base-calendar>
+  <popover ref="popover">
+    <range-date-picker-input slot="reference" radius="19px" :clearable="true" v-model="time"></range-date-picker-input>
+    <range-calendar slot="content" @on-change="setTime" v-click-outside="hideSelf"></range-calendar>
   </popover>
 </template>
 
 <script>
 import dayjs from 'dayjs'
 import Popover from '../popover'
-import BaseCalendar from './components/BaseCalendar'
-import DatePickerInput from './components/DatePickerInput'
+import RangeCalendar from './components/RangeCalendar'
+import RangeDatePickerInput from './components/RangeDatePickerInput'
 import clickOutside from '../../directives/click-outside'
 export default {
   name: 'SingleDatePicker',
@@ -17,7 +17,7 @@ export default {
   data () {
     return {
       isShow: false,
-      time: dayjs()
+      time: [dayjs(), dayjs()]
     }
   },
   created () {
@@ -34,8 +34,8 @@ export default {
   },
   components: {
     Popover,
-    BaseCalendar,
-    DatePickerInput
+    RangeCalendar,
+    RangeDatePickerInput
   },
   methods: {
     hideSelf () {
@@ -44,11 +44,9 @@ export default {
     setTime (value) {
       this.time = value.date
       this.$nextTick(() => {
-        this.$refs.popover.hide()
+        // this.$refs.popover.hide()
       })
     }
   }
 }
 </script>
-
-
