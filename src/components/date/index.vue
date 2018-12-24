@@ -10,6 +10,7 @@ export default {
     return {...this.$props}
   },
   props: {
+    value: [String, Array],
     type: {
       type: String,
       default: 'date'

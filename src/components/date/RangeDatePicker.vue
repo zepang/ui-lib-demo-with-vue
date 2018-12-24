@@ -13,7 +13,7 @@ import RangeDatePickerInput from './components/RangeDatePickerInput'
 import clickOutside from '../../directives/click-outside'
 export default {
   name: 'SingleDatePicker',
-  inject: ['type', 'format'],
+  inject: ['type', 'format', 'value'],
   data () {
     return {
       isShow: false,

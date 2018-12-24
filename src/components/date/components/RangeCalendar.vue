@@ -14,7 +14,6 @@
         class="day"
         v-for="item in calendar" 
         @click="getTime(item)" 
-        @mouseenter="changeHover(item)"
         :class="[{
           'selected': item.isSelected,
           'hover': item.isHover,
@@ -31,16 +30,25 @@
 </template>
 <script>
 import dayjs from 'dayjs'
+function createDateObj (date) {
+  return {
+    date,
+    isSelected: false,
+    isHover: false,
+    isDisabled: false
+  }
+}
 export default {
   data () {
     return {
-      startTime: null,
-      endTime: null,
+      startTime: this.value[0] && dayjs(this.value[0]) || null,
+      endTime: this.value[1] && dayjs(this.value[1]) || null,
       selectedDate: null,
       dayjs: dayjs,
       calendar: []
     }
   },
+  inject: ['value'],
   created () {
     this.initList()
   },
@@ -88,6 +96,18 @@ export default {
         })
       }
       this.calendar = lastMonthDateArr.concat(curMonthDateArr, nextMonthDateArr)
+
+      this.initListStatus()
+    },
+    initListStatus () {
+      if (this.startTime) {
+        debugger
+        this.calendar.find(item => item.date.format('YYYY_MM_DD') === this.startTime.format('YYYY_MM_DD')).isSelected = true
+      }
+      if (this.endTime) {
+        this.calendar.find(item => item.date.format('YYYY_MM_DD') === this.endTime.format('YYYY_MM_DD')).isSelected = true
+      }
+      this.changeHover()
     },
     getTime (value) {
       if (value.isDisabled) return 
@@ -114,27 +134,27 @@ export default {
         return item
       })
 
-      this.startTime && (this.calendar.find(item => item.date === this.startTime).isSelected = true)
-      this.endTime && (this.calendar.find(item => item.date === this.endTime).isSelected = true)
+      this.startTime && (this.calendar.find(item => item.date.formate('YYYY-MM-DD') === this.startTime.formate('YYYY-MM-DD')).isSelected = true)
+      this.endTime && (this.calendar.find(item => item.date.formate('YYYY-MM-DD') === this.endTime.formate('YYYY-MM-DD')).isSelected = true)
+
+      // 改变范围内的 li 样式
+      this.changeHover()
 
       console.log('startTime:', this.startTime && this.startTime);
       console.log('endTime:', this.endTime && this.endTime);
     },
     changeHover (hoverDate) {
-      console.log('mouseenter');
-      if (!this.startTime || hoverDate.isDisabled) return
+      if (!this.startTime && !this.endTime) return
       let prev = this.startTime
-      let next = hoverDate.date
-      if (this.startTime.isAfter(hoverDate.date)) {
-        prev = hoverDate.date
+      let next = this.endTime
+      if (this.startTime.isAfter(this.endTime)) {
+        prev = this.endTime
         next = this.startTime
       }
 
       this.calendar = this.calendar.map(item => {
-        // console.log(item, prev, next)
         if (item.date.isAfter(prev) && item.date.isBefore(next)) {
           item.isHover = true
-          console.log(item)
         } else {
           item.isHover = false
         }
@@ -182,6 +202,7 @@ ul li {
   transition: background-color 1.5s;
   &:not(.disabled):hover {
     background-color: #eeeeee;
+    color: #535ef5;
     cursor: pointer;
   }
   &.hover:not(.disabled) {
@@ -200,6 +221,7 @@ ul li {
 }
 
 li.day.selected {
+  background-color: #eeeeee;
   span {
     background-color: #535ef5 !important;
     box-shadow: 2px 1px 10px 0px rgba(22, 24, 39, 0.28);
