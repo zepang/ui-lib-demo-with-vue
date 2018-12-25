@@ -1,13 +1,20 @@
 <template>
-  <component :is="datePickerComponent"></component>
+  <component :is="datePickerComponent" @change="handleChange"></component>
 </template>
 
 <script>
 import SingleDatePicker from './SingleDatePicker'
 import RangeDatePicker from './RangeDatePicker'
 export default {
+  data () {
+    return {
+      time: {
+        value: this.value || null
+      }
+    }
+  },
   provide() {
-    return {...this.$props}
+    return {...this.$props, props: this.$props}
   },
   props: {
     value: [String, Array],
@@ -18,6 +25,18 @@ export default {
     format: {
       type: String,
       default: 'YYYY-MM-DD'
+    },
+    rangeSeparator: {
+      type: String,
+      default: '-'
+    },
+    radius: {
+      type: String,
+      default: '4px'
+    },
+    clearable: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -33,6 +52,18 @@ export default {
   components: {
     SingleDatePicker,
     RangeDatePicker
+  },
+  methods: {
+    handleChange (val) {
+      console.log('index:', val);
+      this.$emit('input', val)
+      this.$emit('change', val)
+    }
+  },
+  watch: {
+    value (val) {
+      this.time.value = val
+    }
   }
 }
 </script>

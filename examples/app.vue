@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <img class="avatar" src="../src/assets/images/cache_user_icon.jpg" alt=""> -->
     <router-view></router-view>
-    <lai-date-picker v-model="time" format="YYYY-MM-DD" type="dateRange"></lai-date-picker>
+    <lai-date-picker v-model="time" format="YYYY-MM-DD" type="dateRange" @change="handleChange"></lai-date-picker>
   </div>
 </template>
 
@@ -12,6 +12,11 @@ export default {
   data () {
     return {
       time: [new Date(), new Date()]
+    }
+  },
+  methods: {
+    handleChange (val) {
+      console.log('app:', val)
     }
   }
 }

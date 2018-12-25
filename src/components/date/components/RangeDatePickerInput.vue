@@ -27,18 +27,15 @@ export default {
   data () {
     return {
       dayjs: dayjs,
-      startTime: this.value[0].format('YYYY-MM-DD') || dayjs(),
-      endTime: this.value[1].format('YYYY-MM-DD') || dayjs()
+      startTime:  dayjs(this.value[0]).format(this.format) || null,
+      endTime:  dayjs(this.value[1]).format(this.format) || null
     }
   },
+  inject: ['value', 'format'],
   props: {
     rangeSeparator: {
       type: String,
       default: '-'
-    },
-    value: {
-      type: Array,
-      default: () => [dayjs(), dayjs()]
     },
     radius: {
       type: String,
@@ -72,6 +69,7 @@ export default {
   box-shadow: 0px 0px 1px 0px #999999;
   font-size: 14px;
   cursor: default;
+  user-select: none;
   &:focus {
     outline: none;
     box-shadow: 0px 0px 1px 0px #535ef5 ;
