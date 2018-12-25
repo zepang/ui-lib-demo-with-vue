@@ -223,7 +223,13 @@ export default {
 
       this.$emit('input', [])
     }
-  }
+  },
+  // watch: {
+  //   value (val) {
+  //     if (val[0]) this.startTime = dayjs(this.value[0]).format(this.format)
+  //     if (val[1]) this.endTime = dayjs(this.value[1]).format(this.format)
+  //   }
+  // }
 }
 </script>
 <style lang="less" scoped>

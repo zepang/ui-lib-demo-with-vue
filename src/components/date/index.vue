@@ -6,6 +6,13 @@
 import SingleDatePicker from './SingleDatePicker'
 import RangeDatePicker from './RangeDatePicker'
 export default {
+  data () {
+    return {
+      time: {
+        value: this.value || null
+      }
+    }
+  },
   provide() {
     return {injectProps: this.$props}
   },
