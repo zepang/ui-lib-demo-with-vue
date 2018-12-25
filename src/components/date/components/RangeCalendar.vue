@@ -19,7 +19,7 @@
           'hover': item.isHover,
           'disabled': item.isDisabled
         }]">
-        <span>{{item.date.date()}}</span>
+        <span>{{dayjs(item.date).date()}}</span>
       </li>
     </ul>
     <div class="btn-groups">
@@ -30,25 +30,17 @@
 </template>
 <script>
 import dayjs from 'dayjs'
-function createDateObj (date) {
-  return {
-    date,
-    isSelected: false,
-    isHover: false,
-    isDisabled: false
-  }
-}
 export default {
   data () {
     return {
-      startTime: this.value[0] && dayjs(this.value[0]) || null,
-      endTime: this.value[1] && dayjs(this.value[1]) || null,
+      startTime: this.value[0] && dayjs(this.value[0]).format(this.format) || null,
+      endTime: this.value[1] && dayjs(this.value[1]).format(this.format) || null,
       selectedDate: null,
       dayjs: dayjs,
       calendar: []
     }
   },
-  inject: ['value'],
+  inject: ['value', 'format'],
   created () {
     this.initList()
   },
@@ -75,7 +67,7 @@ export default {
         lastMonthDateArr.unshift({
           ...dateObj,
           isDisabled: true,
-          date: dayjs(`${dayjs().year()}-${dayjs().month()}-${date}`)
+          date: dayjs(`${dayjs().year()}-${dayjs().month()}-${date}`).format(this.format)
         })
         date = date - 1
       }
@@ -84,7 +76,7 @@ export default {
         curMonthDateArr.push({
           ...dateObj,
           isDisabled: false,
-          date: dayjs(`${dayjs().year()}-${dayjs().month() + 1}-${i}`),
+          date: dayjs(`${dayjs().year()}-${dayjs().month() + 1}-${i}`).format(this.format),
         })
       }
 
@@ -92,7 +84,7 @@ export default {
         nextMonthDateArr.push({
           ...dateObj,
           isDisabled: true,
-          date: dayjs(`${dayjs().year()}-${dayjs().month() + 2}-${i}`)
+          date: dayjs(`${dayjs().year()}-${dayjs().month() + 2}-${i}`).format(this.format)
         })
       }
       this.calendar = lastMonthDateArr.concat(curMonthDateArr, nextMonthDateArr)
@@ -101,11 +93,10 @@ export default {
     },
     initListStatus () {
       if (this.startTime) {
-        debugger
-        this.calendar.find(item => item.date.format('YYYY_MM_DD') === this.startTime.format('YYYY_MM_DD')).isSelected = true
+        this.calendar.find(item => item.date === this.startTime).isSelected = true
       }
       if (this.endTime) {
-        this.calendar.find(item => item.date.format('YYYY_MM_DD') === this.endTime.format('YYYY_MM_DD')).isSelected = true
+        this.calendar.find(item => item.date === this.endTime).isSelected = true
       }
       this.changeHover()
     },
@@ -114,16 +105,16 @@ export default {
       let dateObj = this.calendar.find(item => item.date === value.date)
       dateObj.isSelected = true
 
-      if (this.startTime && this.startTime.isBefore(dateObj.date)) {
+      if (this.startTime && dayjs(this.startTime).isBefore(dayjs(dateObj.date))) {
         this.endTime = dateObj.date
 
-      } else if (this.startTime && this.startTime.isAfter(dateObj.date)) {
+      } else if (this.startTime && dayjs(this.startTime).isAfter(dayjs(dateObj.date))) {
         this.endTime = this.startTime
         this.startTime = dateObj.date
-      } else if (this.endTime && this.endTime.isBefore(dateObj.date)) {
+      } else if (this.endTime && dayjs(this.endTime).isBefore(dayjs(dateObj.date))) {
         this.startTime = this.endTime
         this.endTime = dateObj.date
-      } else if (this.endTime && this.endTime.isAfter(dateObj.date)) {
+      } else if (this.endTime && dayjs(this.endTime).isAfter(dayjs(dateObj.date))) {
         this.startTime = dateObj.date
       } else {
         this.startTime = dateObj.date
@@ -134,8 +125,8 @@ export default {
         return item
       })
 
-      this.startTime && (this.calendar.find(item => item.date.formate('YYYY-MM-DD') === this.startTime.formate('YYYY-MM-DD')).isSelected = true)
-      this.endTime && (this.calendar.find(item => item.date.formate('YYYY-MM-DD') === this.endTime.formate('YYYY-MM-DD')).isSelected = true)
+      this.startTime && (this.calendar.find(item => item.date === this.startTime).isSelected = true)
+      this.endTime && (this.calendar.find(item => item.date === this.endTime).isSelected = true)
 
       // 改变范围内的 li 样式
       this.changeHover()
@@ -147,13 +138,9 @@ export default {
       if (!this.startTime && !this.endTime) return
       let prev = this.startTime
       let next = this.endTime
-      if (this.startTime.isAfter(this.endTime)) {
-        prev = this.endTime
-        next = this.startTime
-      }
 
       this.calendar = this.calendar.map(item => {
-        if (item.date.isAfter(prev) && item.date.isBefore(next)) {
+        if (dayjs(item.date).isAfter(dayjs(this.startTime)) && dayjs(item.date).isBefore(dayjs(this.endTime))) {
           item.isHover = true
         } else {
           item.isHover = false
@@ -163,7 +150,7 @@ export default {
     },
     selectRangeDate () {
       if (!this.startTime && !this.endTime) return 
-      console.log([this.startTime.format('YYYY-MM-DD'), this.endTime.format('YYYY-MM-DD')])
+      console.log([this.startTime, this.endTime])
       // this.$emit('on-change', [this.startTime.format('YYYY-MM-DD'), this.endTime.format('YYYY-MM-DD')])
     }
   }

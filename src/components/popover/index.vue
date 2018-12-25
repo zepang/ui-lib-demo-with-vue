@@ -1,6 +1,6 @@
 <template>
   <div class="popover__wrapper" :style="{width: width}">
-    <div class="reference" @click="isShow = true">
+    <div class="reference" @click="show">
       <slot name="reference">
       </slot>
     </div>
@@ -13,11 +13,15 @@
 </template>
 
 <script>
+import clickOutside from '../../directives/click-outside'
 export default {
   data () {
     return {
       isShow: false
     }
+  },
+  directives: {
+    'click-outside': clickOutside
   },
   props: {
     width: {
@@ -30,6 +34,9 @@ export default {
     }
   },
   methods: {
+    show () {
+      this.isShow = true
+    },
     hide () {
       this.isShow = false
     }
