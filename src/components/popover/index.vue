@@ -1,11 +1,11 @@
 <template>
-  <div class="popover__wrapper" :style="{width: width}">
+  <div class="popover__wrapper" v-click-outside="hide">
     <div class="reference" @click="show">
       <slot name="reference">
       </slot>
     </div>
     <transition name="fade">
-      <div class="content" v-if="isShow" v-click-outside="hide">
+      <div class="content" v-if="isShow">
         <slot name="content">{{content}}</slot>
       </div>
     </transition>
@@ -49,6 +49,7 @@ export default {
   .content {
     position: absolute;
     top: 110%;
+    z-index: 999;
   }
 }
 .fade-enter, .fade-leave-to {

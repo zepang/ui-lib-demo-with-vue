@@ -2,7 +2,12 @@
   <div id="app">
     <!-- <img class="avatar" src="../src/assets/images/cache_user_icon.jpg" alt=""> -->
     <router-view></router-view>
-    <lai-date-picker v-model="time" format="YYYY-MM-DD" type="dateRange" @change="handleChange"></lai-date-picker>
+    <div style="width: 300px; margin-top: 20px; display: inline-block">
+      <lai-date-picker v-model="time" format="YYYY-MM-DD" type="dateRange" @change="handleChange"></lai-date-picker>
+    </div>
+    <div style="margin-top: 20px; display: inline-block">
+      <lai-date-picker v-model="time2" format="YYYY-MM-DD" type="date" @change="handleChange"></lai-date-picker>
+    </div>
   </div>
 </template>
 
@@ -11,7 +16,8 @@ export default {
   naem: 'App',
   data () {
     return {
-      time: [new Date(), new Date()]
+      time: [new Date(), new Date()],
+      time2: new Date()
     }
   },
   methods: {

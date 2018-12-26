@@ -17,7 +17,7 @@ export default {
     return {injectProps: this.$props}
   },
   props: {
-    value: [String, Array],
+    value: [String, Array, Date],
     type: {
       type: String,
       default: 'date'

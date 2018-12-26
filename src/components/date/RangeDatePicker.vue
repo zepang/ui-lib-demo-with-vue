@@ -90,7 +90,6 @@ export default {
     if (this.value[0]) this.startTime = dayjs(this.value[0]).format(this.format)
     if (this.value[1]) this.endTime = dayjs(this.value[1]).format(this.format)
     this.initList()
-    console.log(this)
   },
   methods: {
     initList () {
@@ -223,13 +222,7 @@ export default {
 
       this.$emit('input', [])
     }
-  },
-  // watch: {
-  //   value (val) {
-  //     if (val[0]) this.startTime = dayjs(this.value[0]).format(this.format)
-  //     if (val[1]) this.endTime = dayjs(this.value[1]).format(this.format)
-  //   }
-  // }
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -307,6 +300,7 @@ export default {
   width: 280px;
   padding: 20px;
   box-shadow: 0px 1px 10px 0px rgba(22, 24, 39, 0.08);
+  background-color: #fff;
   font-size: 0;
   user-select: none;
   .weekDaysTitle {
