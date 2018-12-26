@@ -15,15 +15,26 @@
       </span>
     </div>
     <div class="base-calendar__wrapper" slot="content">
+      <div class="calendar-title__wrapper">
+        <div class="prev">
+          <i class="iconfont icon-ico-two-left-arrow" @click="calendarDate = calendarDate.subtract(1, 'year')"></i>
+          <i class="iconfont icon-arrowleftb" @click="calendarDate = calendarDate.subtract(1, 'month')"></i>
+        </div>
+        <h3 class="calendar-title">{{calendarDate.year()}}年{{calendarDate.month() + 1}}月</h3>
+        <div class="next">
+          <i class="iconfont icon-arrowright" @click="calendarDate = calendarDate.add(1, 'month')"></i>
+          <i class="iconfont icon-ico-two-right-arrow" @click="calendarDate = calendarDate.add(1, 'year')"></i>
+        </div>
+      </div>
       <table>
         <thead>
+          <th>日</th>
           <th>一</th>
           <th>二</th>
           <th>三</th>
           <th>四</th>
           <th>五</th>
           <th>六</th>
-          <th>日</th>
         </thead>
         <tbody>
           <tr v-for="(row, rowIndex) in calendar" :key="rowIndex">
@@ -52,6 +63,7 @@ export default {
   inject: ['injectProps'],
   data () {
     return {
+      calendarDate: dayjs(),
       isShow: false,
       time: null,
       selectedDate: null,
@@ -60,7 +72,12 @@ export default {
     }
   },
   created () {
-    if (this.value) this.time = dayjs(this.value).format(this.format)
+    if (this.value) { 
+      this.time = dayjs(this.value).format(this.format)
+      this.calendarDate = dayjs(this.value)
+    } else {
+      this.time = dayjs().format(this.format)
+    }
     this.generatCalendar()
   },
   computed: {
@@ -90,7 +107,7 @@ export default {
     /**
      * 生成日历数据和初始化日历的状态
      */
-    generatCalendar () {
+    generatCalendar (date=dayjs()) {
       const dateObj = {
         date: null,
         isSelected: false,
@@ -105,16 +122,17 @@ export default {
       // 汇总
       const calendar = []
 
-      let lastDateOfCurMonth = dayjs().endOf('month').date()
-      let lastDateOfLastMonth = dayjs().subtract(1, 'month').endOf('month').date()
+      let curDate = dayjs(date)
+      let lastDateOfCurMonth = curDate.endOf('month').date()
+      let lastDateOfLastMonth = curDate.subtract(1, 'month').endOf('month').date()
       // 即为上个月的在 date-table 中展示的天数
-      let startDayOfCurMonth = dayjs().startOf('month').day()
+      let startDayOfCurMonth = curDate.startOf('month').day() + 1
 
       for (let i = 1, date = lastDateOfLastMonth; i < startDayOfCurMonth; i++) {
         lastMonthDateArr.unshift({
           ...dateObj,
           isDisabled: true,
-          date: dayjs(`${dayjs().year()}-${dayjs().month()}-${date}`).format(this.format)
+          date: dayjs(`${curDate.year()}-${curDate.month()}-${date}`).format(this.format)
         })
         date = date - 1
       }
@@ -123,7 +141,7 @@ export default {
         curMonthDateArr.push({
           ...dateObj,
           isDisabled: false,
-          date: dayjs(`${dayjs().year()}-${dayjs().month() + 1}-${i}`).format(this.format),
+          date: dayjs(`${curDate.year()}-${curDate.month() + 1}-${i}`).format(this.format),
         })
       }
 
@@ -131,10 +149,9 @@ export default {
         nextMonthDateArr.push({
           ...dateObj,
           isDisabled: true,
-          date: dayjs(`${dayjs().year()}-${dayjs().month() + 2}-${i}`).format(this.format)
+          date: dayjs(`${curDate.year()}-${curDate.month() + 2}-${i}`).format(this.format)
         })
       }
-      
       const tmp = lastMonthDateArr.concat(curMonthDateArr, nextMonthDateArr)
       while (tmp.length) {
         calendar.push(tmp.splice(0, 7))
@@ -166,6 +183,11 @@ export default {
     clearTime () {
       this.time = null
       this.$emit('input', null)
+    }
+  },
+  watch: {
+    calendarDate (val) {
+      this.generatCalendar(val)
     }
   }
 }
@@ -233,10 +255,32 @@ export default {
 
 .base-calendar__wrapper {
   // width: 280px;
-  padding: 20px;
+  padding: 10px;
+  box-sizing: border-box;
   box-shadow: 0px 1px 10px 0px rgba(22, 24, 39, 0.08);
   font-size: 0;
   user-select: none;
+  .calendar-title__wrapper {
+    width: 100%;
+    position: relative;
+    .prev, .next {
+      position: absolute;
+      top: 0;
+      cursor: pointer;
+    }
+    .prev {
+      left: 0;
+    }
+    .next {
+      right: 0;
+    }
+    .calendar-title {
+      font-size: 16px;
+      line-height: 1;
+      font-weight: 600;
+      text-align: center;
+    }
+  }
   table {
     width: 100%;
     thead {
