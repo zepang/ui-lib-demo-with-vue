@@ -1,19 +1,30 @@
-let clickHandleOutside
+let nodeList = []
+
+document.addEventListener('click', e => {
+  nodeList.forEach(node => {
+    if (!node.el.contains(e.target)) {
+      node.callback()
+    }
+  })
+})
+
 export default {
-  bind (el, binding) {
+  inserted (el, binding, vnode) {
     if (typeof binding.value !== 'function') {
       throw new TypeError('v-clickOutside 的值必须是一个函数')
     }
-    clickHandleOutside = function (e) {
-      e.stopPropagation()
-      if (!el.contains(e.target)) {
-        binding.value()
+    let node = {
+      el: el,
+      uid: vnode.context._uid,
+      callback: binding.value
+    }
+    nodeList.push(node)
+  },
+  unbind (el, binding, vnode) {
+    for (let i =0; i < nodeList.length; i++) {
+      if (nodeList[i].uid = vnode.context._uid) {
+        nodeList.splice(i, 1)
       }
     }
-    document.addEventListener('click', clickHandleOutside, false)
-  },
-
-  unbind () {
-    document.removeEventListener('click', clickHandleOutside, false)
   }
 }

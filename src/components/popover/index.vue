@@ -1,11 +1,11 @@
 <template>
-  <div class="popover__wrapper" v-click-outside="hide">
+  <div class="popover__wrapper">
     <div class="reference" @click="show">
       <slot name="reference">
       </slot>
     </div>
     <transition name="fade">
-      <div class="content" v-if="isShow">
+      <div class="content" v-if="isShow" v-click-outside="hide">
         <slot name="content">{{content}}</slot>
       </div>
     </transition>
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     show () {
-      this.isShow = true
+      this.isShow = !this.isShow
     },
     hide () {
       this.isShow = false
@@ -57,7 +57,9 @@ export default {
   transform: translateY(20px);
 }
 .fade-enter-active, .fade-leave-active {
-  transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition-property: transform, opacity;
+  transition-duration: 1s;
+  transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 .fade-enter-to, .fade-leave {
   opacity: 1;
