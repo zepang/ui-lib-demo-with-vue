@@ -15,35 +15,37 @@
         placeholder="请选择日期"
         type="text" readonly>
       </div>
-      <span v-if="clearable && (startTime || endTime)" class="error-icon" @click.stop="clearTime">
+      <span v-if="clearable && (startTime || endTime)" class="error-icon" @click.stop="clearDate">
         <i class="iconfont icon-error"></i>
       </span>
     </div>
     <div slot="content" class="base-calendar__wrapper">
-      <ul class="weekDaysTitle">
-        <li>一</li>
-        <li>二</li>
-        <li>三</li>
-        <li>四</li>
-        <li>五</li>
-        <li>六</li>
-        <li>日</li>
-      </ul>
-      <ul class="days">
-        <li 
-          class="day"
-          v-for="item in calendar" 
-          @click="getTime(item)" 
-          :class="[{
-            'selected': item.isSelected,
-            'hover': item.isHover,
-            'disabled': item.isDisabled
-          }]">
-          <span>{{dayjs(item.date).date()}}</span>
-        </li>
-      </ul>
+      <table>
+        <thead>
+          <th>日</th>
+          <th>一</th>
+          <th>二</th>
+          <th>三</th>
+          <th>四</th>
+          <th>五</th>
+          <th>六</th>
+        </thead>
+        <tbody>
+          <tr v-for="(row, rowIndex) in calendar" :key="rowIndex">
+            <td 
+              @click="selectDate(column)"
+              v-for="(column, columnIndex) in row" 
+              :key="columnIndex" 
+              :class="{
+                'selected': column.isSelected,
+                'hover': column.isHover,
+                'disabled': column.isDisabled
+              }"><span>{{dayjs(column.date).date()}}</span></td>
+          </tr>
+        </tbody>
+      </table>
       <div class="btn-groups">
-        <button @click="selectRangeDate">确定</button>
+        <button @click="confirm">确定</button>
         <button @click="cancel">取消</button>
       </div>
     </div>
@@ -89,10 +91,10 @@ export default {
   created () {
     if (this.value[0]) this.startTime = dayjs(this.value[0]).format(this.format)
     if (this.value[1]) this.endTime = dayjs(this.value[1]).format(this.format)
-    this.initList()
+    this.generatCalendar()
   },
   methods: {
-    initList () {
+    generatCalendar (date=dayjs()) {
       const dateObj = {
         date: null,
         isSelected: false,
@@ -104,17 +106,20 @@ export default {
       const curMonthDateArr = []
       // 下个月在当前月日历上展示的日期集合
       const nextMonthDateArr = []
+      // 汇总
+      const calendar = []
 
-      let lastDateOfCurMonth = dayjs().endOf('month').date()
-      let lastDateOfLastMonth = dayjs().subtract(1, 'month').endOf('month').date()
+      let curDate = dayjs(date)
+      let lastDateOfCurMonth = curDate.endOf('month').date()
+      let lastDateOfLastMonth = curDate.subtract(1, 'month').endOf('month').date()
       // 即为上个月的在 date-table 中展示的天数
-      let startDayOfCurMonth = dayjs().startOf('month').day()
+      let startDayOfCurMonth = curDate.startOf('month').day() + 1
 
       for (let i = 1, date = lastDateOfLastMonth; i < startDayOfCurMonth; i++) {
         lastMonthDateArr.unshift({
           ...dateObj,
           isDisabled: true,
-          date: dayjs(`${dayjs().year()}-${dayjs().month()}-${date}`).format(this.format)
+          date: dayjs(`${curDate.year()}-${curDate.month()}-${date}`).format(this.format)
         })
         date = date - 1
       }
@@ -123,7 +128,7 @@ export default {
         curMonthDateArr.push({
           ...dateObj,
           isDisabled: false,
-          date: dayjs(`${dayjs().year()}-${dayjs().month() + 1}-${i}`).format(this.format),
+          date: dayjs(`${curDate.year()}-${curDate.month() + 1}-${i}`).format(this.format),
         })
       }
 
@@ -131,30 +136,39 @@ export default {
         nextMonthDateArr.push({
           ...dateObj,
           isDisabled: true,
-          date: dayjs(`${dayjs().year()}-${dayjs().month() + 2}-${i}`).format(this.format)
+          date: dayjs(`${curDate.year()}-${curDate.month() + 2}-${i}`).format(this.format)
         })
       }
-      this.calendar = lastMonthDateArr.concat(curMonthDateArr, nextMonthDateArr)
-
-      this.initListStatus()
-    },
-    initListStatus () {
-      if (this.startTime) {
-        this.calendar.find(item => item.date === this.startTime).isSelected = true
+      const tmp = lastMonthDateArr.concat(curMonthDateArr, nextMonthDateArr)
+      while (tmp.length) {
+        calendar.push(tmp.splice(0, 7))
       }
-      if (this.endTime) {
-        this.calendar.find(item => item.date === this.endTime).isSelected = true
-      }
-      this.changeHover()
+      this.calendar = calendar
+      // 初始化状态
+      this.changeRangeDateSelectedStatus()
     },
-    getTime (value) {
+    changeRangeDateSelectedStatus () {
+      if (this.startTime && this.endTime) {
+        this.changeSelectedStatus([this.startTime, this.endTime])
+      } else if (this.startTime) {
+        this.changeSelectedStatus([this.startTime])
+      } else if (this.endTime) {
+        this.changeSelectedStatus([this.endTime])
+      }
+    },
+    selectDate (value) {
       if (value.isDisabled) return 
-      let dateObj = this.calendar.find(item => item.date === value.date)
-      dateObj.isSelected = true
+      let dateObj
+      for (let i = 0; i < this.calendar.length; i++) {
+        for (let j = 0; j < this.calendar[i].length; j++) {
+          if (this.calendar[i][j].date === value.date) {
+            dateObj = this.calendar[i][j]
+          }
+        }
+      }
 
       if (this.startTime && dayjs(this.startTime).isBefore(dayjs(dateObj.date))) {
         this.endTime = dateObj.date
-
       } else if (this.startTime && dayjs(this.startTime).isAfter(dayjs(dateObj.date))) {
         this.endTime = this.startTime
         this.startTime = dateObj.date
@@ -167,36 +181,36 @@ export default {
         this.startTime = dateObj.date
       }
 
-      this.calendar = this.calendar.map(item => {
-        item.isSelected = false
-        return item
-      })
-
-      this.startTime && (this.calendar.find(item => item.date === this.startTime).isSelected = true)
-      this.endTime && (this.calendar.find(item => item.date === this.endTime).isSelected = true)
-
-      // 改变范围内的 li 样式
-      this.changeHover()
-
-      console.log('startTime:', this.startTime && this.startTime);
-      console.log('endTime:', this.endTime && this.endTime);
+      this.changeRangeDateSelectedStatus()
+      this.changeHoverStatus()
     },
-    changeHover (hoverDate) {
-      if (!this.startTime && !this.endTime) return
-      let prev = this.startTime
-      let next = this.endTime
-
-      this.calendar = this.calendar.map(item => {
-        if (dayjs(item.date).isAfter(dayjs(this.startTime)) && dayjs(item.date).isBefore(dayjs(this.endTime))) {
-          item.isHover = true
-        } else {
-          item.isHover = false
+    changeSelectedStatus (date) {
+      if (!(date instanceof Array)) date = [date]
+      for (let i = 0; i < this.calendar.length; i++) {
+        for (let j = 0; j < this.calendar[i].length; j++) {
+          if (~date.indexOf(this.calendar[i][j].date)) {
+            this.calendar[i][j].isSelected = true
+          } else {
+            this.calendar[i][j].isSelected = false
+          }
         }
-        return item
-      })
+      }
+    },
+    changeHoverStatus () {
+      if (!this.startTime && !this.endTime) return
+
+      for (let i = 0; i < this.calendar.length; i++) {
+        for (let j = 0; j < this.calendar[i].length; j++) {
+          if (dayjs(this.calendar[i][j].date).isAfter(dayjs(this.startTime)) && dayjs(this.calendar[i][j].date).isBefore(dayjs(this.endTime))) {
+            this.calendar[i][j].isHover = true
+          } else {
+            this.calendar[i][j].isHover = false
+          }
+        }
+      }
     },
     // 选择时间
-    selectRangeDate () {
+    confirm () {
       if (!this.startTime && !this.endTime) return 
       
       this.$emit('change', [this.startTime, this.endTime])
@@ -207,20 +221,28 @@ export default {
       this.startTime = dayjs(this.value[0]).format(this.format) || null
       this.endTime = dayjs(this.value[1]).format(this.format) || null
       // 重置状态
-      this.initListStatus()
-      this.$refs.popover.hide()
-    },
-    setTime (value) {
-      this.time = value.date
+      this.changeRangeDateSelectedStatus()
+      this.changeHoverStatus()
       this.$nextTick(() => {
         this.$refs.popover.hide()
       })
     },
-    clearTime () {
+    clearDate () {
       this.startTime = null
       this.endTime = null
-
+      this.resetRangeDateCalendar()
       this.$emit('input', [])
+      this.$nextTick(() => {
+        this.$refs.popover.hide()
+      })
+    },
+    resetRangeDateCalendar () {
+      for (let i = 0; i < this.calendar.length; i++) {
+        for (let j = 0; j < this.calendar[i].length; j++) {
+          this.calendar[i][j].isSelected = false
+          this.calendar[i][j].isHover = false
+        }
+      }
     }
   }
 }
@@ -363,6 +385,44 @@ export default {
     button {
       display: inline-block;
       margin-left: 10px;
+    }
+  }
+}
+
+table {
+  width: 100%;
+  thead {
+    th {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+  tbody {
+    tr {
+      td {
+        padding: 3%;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        cursor: pointer;
+        &.selected {
+          border-radius: 50%;
+          background-color: #535ef5;
+          color: #ffffff;
+        }
+        &.disabled {
+          color: #c4c1c1;
+        }
+        &:not(.disabled):not(.selected):hover {
+          background-color: #eeeeee;
+        }
+        &.hover:not(.disabled) {
+          background-color: #eeeeee;
+        }
+        &.disabled:hover {
+          cursor: not-allowed;
+        }
+      }
     }
   }
 }

@@ -39,7 +39,7 @@
         <tbody>
           <tr v-for="(row, rowIndex) in calendar" :key="rowIndex">
             <td 
-              @click="selectDate(column)"
+              @click="confirm(column)"
               v-for="(column, columnIndex) in row" 
               :key="columnIndex" 
               :class="{
@@ -158,9 +158,9 @@ export default {
       }
       this.calendar = calendar
       // 初始化状态
-      this.initCalendarStatus(this.time)
+      this.changeSelectedStatus(this.time)
     },
-    initCalendarStatus (date) {
+    changeSelectedStatus (date) {
       for (let i = 0; i < this.calendar.length; i++) {
         for (let j = 0; j < this.calendar[i].length; j++) {
           if (this.calendar[i][j].date === date) {
@@ -171,10 +171,10 @@ export default {
         }
       }
     },
-    selectDate (item) {
+    confirm (item) {
       if (item.isDisabled) return 
       this.time = item.date
-      this.initCalendarStatus(item.date)
+      this.changeSelectedStatus(item.date)
       this.$nextTick(() => {
         this.$refs.popover.hide()
       })
@@ -182,7 +182,19 @@ export default {
     },
     clearTime () {
       this.time = null
+      this.resetRangeDateCalendar()
       this.$emit('input', null)
+      this.$nextTick(() => {
+        this.$refs.popover.hide()
+      })
+    },
+    resetRangeDateCalendar () {
+      for (let i = 0; i < this.calendar.length; i++) {
+        for (let j = 0; j < this.calendar[i].length; j++) {
+          this.calendar[i][j].isSelected = false
+          this.calendar[i][j].isHover = false
+        }
+      }
     }
   },
   watch: {
