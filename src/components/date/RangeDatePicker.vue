@@ -325,59 +325,43 @@ export default {
   background-color: #fff;
   font-size: 0;
   user-select: none;
-  .weekDaysTitle {
-    border-bottom: 1px solid #f5f5f5;
-  }
-  ul {
+  
+  table {
     width: 100%;
-    margin: 0;
-    padding: 0;
-    user-select: none;
-  }
-  ul li {
-    list-style-type: none;
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    padding: 5px;
-    line-height: 30px;
-    box-sizing: border-box;
-    font-size: 14px;
-    text-align: center;
-    cursor: default;
-    border-radius: 50%;
-    transition: background-color 1s;
-    &:not(.disabled):hover {
-      background-color: #eeeeee;
-      color: #535ef5;
-      cursor: pointer;
+    thead {
+      th {
+        padding: 10px;
+        font-size: 14px;
+      }
     }
-    &.hover:not(.disabled) {
-      background-color: #eeeeee;
-      cursor: pointer;
+    tbody {
+      tr {
+        td {
+          padding: 3%;
+          font-size: 14px;
+          font-weight: 600;
+          text-align: center;
+          cursor: pointer;
+          &.selected {
+            border-radius: 50%;
+            background-color: #535ef5;
+            color: #ffffff;
+          }
+          &.disabled {
+            color: #c4c1c1;
+          }
+          &:not(.disabled):not(.selected):hover {
+            background-color: #eeeeee;
+          }
+          &.hover:not(.disabled) {
+            background-color: #eeeeee;
+          }
+          &.disabled:hover {
+            cursor: not-allowed;
+          }
+        }
+      }
     }
-    &.disabled:hover {
-      cursor: not-allowed;
-    }
-    span {
-      display: inline-block;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-    }
-  }
-
-  li.day.selected {
-    background-color: #eeeeee;
-    span {
-      background-color: #535ef5 !important;
-      box-shadow: 2px 1px 10px 0px rgba(22, 24, 39, 0.28);
-      color: #ffffff;
-    }
-  }
-
-  li.day.disabled {
-    color: #c4c1c1;
   }
 
   .btn-groups {
@@ -385,44 +369,6 @@ export default {
     button {
       display: inline-block;
       margin-left: 10px;
-    }
-  }
-}
-
-table {
-  width: 100%;
-  thead {
-    th {
-      padding: 10px;
-      font-size: 14px;
-    }
-  }
-  tbody {
-    tr {
-      td {
-        padding: 3%;
-        font-size: 14px;
-        font-weight: 600;
-        text-align: center;
-        cursor: pointer;
-        &.selected {
-          border-radius: 50%;
-          background-color: #535ef5;
-          color: #ffffff;
-        }
-        &.disabled {
-          color: #c4c1c1;
-        }
-        &:not(.disabled):not(.selected):hover {
-          background-color: #eeeeee;
-        }
-        &.hover:not(.disabled) {
-          background-color: #eeeeee;
-        }
-        &.disabled:hover {
-          cursor: not-allowed;
-        }
-      }
     }
   }
 }
