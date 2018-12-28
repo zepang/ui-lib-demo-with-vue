@@ -1,5 +1,5 @@
 <template>
-  <button :class="btnCls" :disabled="disabled">确认</button>
+  <button :class="btnCls" :disabled="disabled"><slot></slot></button>
 </template>
 <script>
 export default {
