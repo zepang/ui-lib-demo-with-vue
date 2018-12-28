@@ -2,13 +2,13 @@
   <div class="base-calendar__wrapper">
     <div class="calendar-title__wrapper">
       <div class="prev">
-        <i class="iconfont icon-ico-two-left-arrow" @click="changeCalendarDate('subtract', 1, 'year')"></i>
-        <i class="iconfont icon-arrowleftb" @click="changeCalendarDate('subtract', 1, 'month')"></i>
+        <i v-if="picker.yearControler" class="iconfont icon-ico-two-left-arrow" @click="changeCalendarDate('subtract', 1, 'year')"></i>
+        <i v-if="picker.monthControler" class="iconfont icon-arrowleftb" @click="changeCalendarDate('subtract', 1, 'month')"></i>
       </div>
       <h3 class="calendar-title">{{value.year()}}年{{value.month() + 1}}月</h3>
       <div class="next">
-        <i class="iconfont icon-arrowright" @click="changeCalendarDate('add', 1, 'month')"></i>
-        <i class="iconfont icon-ico-two-right-arrow" @click="changeCalendarDate('add', 1, 'year')"></i>
+        <i v-if="picker.monthControler" class="iconfont icon-arrowright" @click="changeCalendarDate('add', 1, 'month')"></i>
+        <i v-if="picker.yearControler" class="iconfont icon-ico-two-right-arrow" @click="changeCalendarDate('add', 1, 'year')"></i>
       </div>
     </div>
     <table>
@@ -29,12 +29,16 @@
             :key="columnIndex" 
             :class="{
               'selected': column.isSelected,
-              'hover': column.isHover,
+              'hover': isDateHover(column.date),
               'disabled': column.isDisabled
             }"><span>{{dayjs(column.date).date()}}</span></td>
         </tr>
       </tbody>
     </table>
+    <div class="btn-groups" v-if="picker.btnControler">
+      <button @click="confirm">确定</button>
+      <button @click="cancel">取消</button>
+    </div>
   </div>
 </template>
 
@@ -58,13 +62,17 @@ export default {
     value: {
       type: [Object, Date],
       default: dayjs()
-    },
-    format: {
-      type: String,
-      default: 'YYYY-MM-DD'
     }
   },
   methods: {
+    isDateHover (date) {
+      if (this.picker.type !== 'dateRange') return false
+      if (this.picker.time.length === 2 && dayjs(date).isAfter(this.picker.time[0]) && dayjs(date).isBefore(this.picker.time[1])) {
+        return true
+      } else {
+        return false
+      }
+    },
     /**
      * 生成日历数据和初始化日历的状态
      */
@@ -93,7 +101,7 @@ export default {
         lastMonthDateArr.unshift({
           ...dateObj,
           isDisabled: true,
-          date: dayjs(`${curDate.year()}-${curDate.month()}-${date}`).format(this.format)
+          date: dayjs(`${curDate.year()}-${curDate.month()}-${date}`).format(this.picker.format)
         })
         date = date - 1
       }
@@ -102,7 +110,7 @@ export default {
         curMonthDateArr.push({
           ...dateObj,
           isDisabled: false,
-          date: dayjs(`${curDate.year()}-${curDate.month() + 1}-${i}`).format(this.format),
+          date: dayjs(`${curDate.year()}-${curDate.month() + 1}-${i}`).format(this.picker.format),
         })
       }
 
@@ -110,7 +118,7 @@ export default {
         nextMonthDateArr.push({
           ...dateObj,
           isDisabled: true,
-          date: dayjs(`${curDate.year()}-${curDate.month() + 2}-${i}`).format(this.format)
+          date: dayjs(`${curDate.year()}-${curDate.month() + 2}-${i}`).format(this.picker.format)
         })
       }
       const tmp = lastMonthDateArr.concat(curMonthDateArr, nextMonthDateArr)
@@ -119,12 +127,17 @@ export default {
       }
       this.calendar = calendar
       // 初始化状态
-      this.changeSelectedStatus(this.picker.time)
+      this.changeSelectedStatus()
     },
     changeSelectedStatus (date) {
+      if (this.picker.time instanceof Array && this.picker.time.length) {
+        date = this.picker.time
+      } else {
+        date = [this.picker.time]
+      }
       for (let i = 0; i < this.calendar.length; i++) {
         for (let j = 0; j < this.calendar[i].length; j++) {
-          if (this.calendar[i][j].date === date) {
+          if (~date.indexOf(this.calendar[i][j].date)) {
             this.calendar[i][j].isSelected = true
           } else {
             this.calendar[i][j].isSelected = false
@@ -133,13 +146,42 @@ export default {
       }
     },
     selectDate (item) {
-      if (this.picker.type === 'dateRange') {
-        // ...
-      }
       if (item.isDisabled) return 
-      this.changeSelectedStatus(item.date)
-      this.picker.hide()
-      this.picker.pickDate(item.date)
+      let date = item.date
+      if (this.picker.type === 'dateRange') {
+        date = this.pickRangeDate(date)
+        this.picker.pickDate(date)
+        this.$nextTick(() => {
+          this.changeSelectedStatus(date)
+        })
+        if (this.picker.time.length === 2 && !this.picker.btnControler) {
+          this.picker.hide()
+        }
+      } else {
+        this.picker.pickDate(date)
+        this.$nextTick(() => {
+          this.changeSelectedStatus(date)
+        })
+
+        if (!this.picker.btnControler) {
+          this.picker.hide()
+        }
+      }
+    },
+    pickRangeDate (date) {
+      let time = []
+      if (this.picker.time.length) {
+        this.picker.time.forEach(item => {
+          if (dayjs(item).isAfter(dayjs(date))) {
+            time = [date, item]
+          } else {
+            time = [item, date]
+          }
+        })
+      } else {
+        time = [date]
+      }
+      return time
     },
     resetRangeDateCalendar () {
       for (let i = 0; i < this.calendar.length; i++) {
@@ -151,7 +193,9 @@ export default {
     },
     changeCalendarDate (method, val, type) {
       this.$emit('input', dayjs(this.value)[method](val, type))
-    }
+    },
+    confirm () {},
+    cancel () {}
   },
   watch: {
     value (val) {
@@ -163,7 +207,6 @@ export default {
 
 <style lang="less" scoped>
 .base-calendar__wrapper {
-  // width: 280px;
   padding: 10px;
   box-sizing: border-box;
   box-shadow: 0px 1px 10px 0px rgba(22, 24, 39, 0.08);
@@ -176,6 +219,14 @@ export default {
       position: absolute;
       top: 0;
       cursor: pointer;
+      & {
+        i {
+          color: #c4c1c1;
+        }
+        i:hover {
+          color: #535ef5;
+        } 
+      }
     }
     .prev {
       left: 0;
@@ -217,10 +268,36 @@ export default {
           &:not(.disabled):not(.selected):hover {
             background-color: #eeeeee;
           }
+          &.hover:not(.disabled) {
+            background-color: #eeeeee;
+          }
           &.disabled:hover {
             cursor: not-allowed;
           }
         }
+      }
+    }
+  }
+  .btn-groups {
+    padding-top: 10px;
+    border-top: 1px dashed #e8e8e8;
+    text-align: right;
+    button {
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 13px;
+      padding: 6px 8px;
+      line-height: 1;
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      &:first-child {
+        background-color: #535ef5;
+        color: #ffffff;
+      }
+      &:last-child {
+        background-color: #c4c1c1;
+        color: #181818;
       }
     }
   }

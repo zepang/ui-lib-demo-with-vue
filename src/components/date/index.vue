@@ -36,6 +36,18 @@ export default {
     clearable: {
       type: Boolean,
       default: true
+    },
+    btnControler: {
+      type: Boolean,
+      default: false
+    },
+    yearControler: {
+      type: Boolean,
+      default: true
+    },
+    monthControler: {
+      type: Boolean,
+      default: true
     }
   },
   created () {

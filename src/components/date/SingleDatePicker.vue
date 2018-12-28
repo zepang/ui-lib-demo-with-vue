@@ -1,6 +1,6 @@
 <template>
   <popover width="200px" ref="popover">
-    <div class="date-picker__input" :style="{borderRadius: radius}" slot="reference">
+    <div class="date-picker__input" :style="{borderRadius: picker.radius}" slot="reference">
       <span class="date-icon">
         <i class="iconfont icon-date-empty"></i>
       </span>
@@ -10,59 +10,20 @@
         placeholder="请选择日期"
         type="text" readonly>
       </div>
-      <span v-if="clearable && picker.time" class="error-icon" @click.stop="clearTime">
+      <span v-if="picker.clearable && picker.time" class="error-icon" @click.stop="clearTime">
         <i class="iconfont icon-error"></i>
       </span>
     </div>
-    <!-- <div class="base-calendar__wrapper" slot="content">
-      <div class="calendar-title__wrapper">
-        <div class="prev">
-          <i class="iconfont icon-ico-two-left-arrow" @click="calendarDate = calendarDate.subtract(1, 'year')"></i>
-          <i class="iconfont icon-arrowleftb" @click="calendarDate = calendarDate.subtract(1, 'month')"></i>
-        </div>
-        <h3 class="calendar-title">{{calendarDate.year()}}年{{calendarDate.month() + 1}}月</h3>
-        <div class="next">
-          <i class="iconfont icon-arrowright" @click="calendarDate = calendarDate.add(1, 'month')"></i>
-          <i class="iconfont icon-ico-two-right-arrow" @click="calendarDate = calendarDate.add(1, 'year')"></i>
-        </div>
-      </div>
-      <table>
-        <thead>
-          <th>日</th>
-          <th>一</th>
-          <th>二</th>
-          <th>三</th>
-          <th>四</th>
-          <th>五</th>
-          <th>六</th>
-        </thead>
-        <tbody>
-          <tr v-for="(row, rowIndex) in calendar" :key="rowIndex">
-            <td 
-              @click="confirm(column)"
-              v-for="(column, columnIndex) in row" 
-              :key="columnIndex" 
-              :class="{
-                'selected': column.isSelected,
-                'hover': column.isHover,
-                'disabled': column.isDisabled
-              }"><span>{{dayjs(column.date).date()}}</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div> -->
     <table-date-panel 
       slot="content" 
       ref="tableDatePanel"
-      v-model="calendarDate"
-      :format="format"></table-date-panel>
+      v-model="calendarDate"></table-date-panel>
   </popover>
 </template>
 
 <script>
 import dayjs from 'dayjs'
 import Popover from '../popover'
-import clickOutside from '../../directives/click-outside'
 import TableDatePanel from './components/TableDatePanel'
 export default {
   name: 'SingleDatePicker',
@@ -78,26 +39,6 @@ export default {
       dayjs: dayjs,
       calendar: []
     }
-  },
-  computed: {
-    value () {
-      return this.picker.value
-    },
-    format () {
-      return this.picker.format
-    },
-    rangeSeparator () {
-      return this.picker.rangeSeparator
-    },
-    radius () {
-      return this.picker.radius
-    },
-    clearable () {
-      return this.picker.clearable
-    }
-  },
-  directives: {
-    'click-outside': clickOutside
   },
   components: {
     Popover,
