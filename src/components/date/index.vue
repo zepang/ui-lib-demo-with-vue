@@ -1,20 +1,19 @@
 <template>
-  <component :is="datePickerComponent" @change="handleChange"></component>
+  <component ref="picker" :is="datePickerComponent" @change="handleChange"></component>
 </template>
 
 <script>
+import dayjs from 'dayjs'
 import SingleDatePicker from './SingleDatePicker'
 import RangeDatePicker from './RangeDatePicker'
 export default {
   data () {
     return {
-      time: {
-        value: this.value || null
-      }
+      time: null
     }
   },
   provide() {
-    return {injectProps: this.$props}
+    return {picker: this}
   },
   props: {
     value: [String, Array, Date],
@@ -40,7 +39,14 @@ export default {
     }
   },
   created () {
-    console.log(RangeDatePicker)
+    if (this.type === 'dateRange') {
+      if (this.value && typeof this.value === 'object' && !(this.value instanceof Array)) { 
+        throw new Error('the value of RangeDatePicker must be a Array')
+      }
+      if (this.value && this.value[0]) this.time = [dayjs(this.value[0]).format(this.format), dayjs(this.value[1]).format(this.format)]
+    } else {
+      if (this.value) this.time = dayjs(this.value).format(this.format)
+    }
   },
   computed: {
     datePickerComponent () {
@@ -61,6 +67,21 @@ export default {
       console.log('index:', val);
       this.$emit('input', val)
       this.$emit('change', val)
+    },
+    pickDate (val) {
+      console.log('index:', val);
+      this.$emit('input', val)
+      this.$emit('change', val)
+    },
+    hide () {
+      this.$nextTick(() => {
+        this.$refs.picker.$refs.popover.hide()
+      })
+    }
+  },
+  watch: {
+    value (val) {
+      this.time = val
     }
   }
 }

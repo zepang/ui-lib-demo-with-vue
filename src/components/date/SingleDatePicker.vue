@@ -6,15 +6,15 @@
       </span>
       <div class="input-group">
         <input 
-        v-model="time"
+        v-model="picker.time"
         placeholder="请选择日期"
         type="text" readonly>
       </div>
-      <span v-if="clearable && time" class="error-icon" @click.stop="clearTime">
+      <span v-if="clearable && picker.time" class="error-icon" @click.stop="clearTime">
         <i class="iconfont icon-error"></i>
       </span>
     </div>
-    <div class="base-calendar__wrapper" slot="content">
+    <!-- <div class="base-calendar__wrapper" slot="content">
       <div class="calendar-title__wrapper">
         <div class="prev">
           <i class="iconfont icon-ico-two-left-arrow" @click="calendarDate = calendarDate.subtract(1, 'year')"></i>
@@ -50,7 +50,12 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </div> -->
+    <table-date-panel 
+      slot="content" 
+      ref="tableDatePanel"
+      v-model="calendarDate"
+      :format="format"></table-date-panel>
   </popover>
 </template>
 
@@ -58,148 +63,53 @@
 import dayjs from 'dayjs'
 import Popover from '../popover'
 import clickOutside from '../../directives/click-outside'
+import TableDatePanel from './components/TableDatePanel'
 export default {
   name: 'SingleDatePicker',
-  inject: ['injectProps'],
+  inject: ['picker'],
+  provide () {
+    return { popover: this.$refs.popover }
+  },
   data () {
     return {
       calendarDate: dayjs(),
       isShow: false,
-      time: null,
       selectedDate: null,
       dayjs: dayjs,
       calendar: []
     }
   },
-  created () {
-    if (this.value) { 
-      this.time = dayjs(this.value).format(this.format)
-      this.calendarDate = dayjs(this.value)
-    } else {
-      this.time = dayjs().format(this.format)
-    }
-    this.generatCalendar()
-  },
   computed: {
     value () {
-      return this.injectProps.value
+      return this.picker.value
     },
     format () {
-      return this.injectProps.format
+      return this.picker.format
     },
     rangeSeparator () {
-      return this.injectProps.rangeSeparator
+      return this.picker.rangeSeparator
     },
     radius () {
-      return this.injectProps.radius
+      return this.picker.radius
     },
     clearable () {
-      return this.injectProps.clearable
+      return this.picker.clearable
     }
   },
   directives: {
     'click-outside': clickOutside
   },
   components: {
-    Popover
+    Popover,
+    TableDatePanel
   },
   methods: {
-    /**
-     * 生成日历数据和初始化日历的状态
-     */
-    generatCalendar (date=dayjs()) {
-      const dateObj = {
-        date: null,
-        isSelected: false,
-        isHover: false
-      }
-      // 上个月在当前月日历上展示的日期集合
-      const lastMonthDateArr = []
-      // 当前月在日历上展示的日期集合
-      const curMonthDateArr = []
-      // 下个月在当前月日历上展示的日期集合
-      const nextMonthDateArr = []
-      // 汇总
-      const calendar = []
-
-      let curDate = dayjs(date)
-      let lastDateOfCurMonth = curDate.endOf('month').date()
-      let lastDateOfLastMonth = curDate.subtract(1, 'month').endOf('month').date()
-      // 即为上个月的在 date-table 中展示的天数
-      let startDayOfCurMonth = curDate.startOf('month').day() + 1
-
-      for (let i = 1, date = lastDateOfLastMonth; i < startDayOfCurMonth; i++) {
-        lastMonthDateArr.unshift({
-          ...dateObj,
-          isDisabled: true,
-          date: dayjs(`${curDate.year()}-${curDate.month()}-${date}`).format(this.format)
-        })
-        date = date - 1
-      }
-
-      for (let i = 1; i <= lastDateOfCurMonth; i++) {
-        curMonthDateArr.push({
-          ...dateObj,
-          isDisabled: false,
-          date: dayjs(`${curDate.year()}-${curDate.month() + 1}-${i}`).format(this.format),
-        })
-      }
-
-      for (let i = 1; i <= 42 - startDayOfCurMonth - lastDateOfCurMonth + 1; i++) {
-        nextMonthDateArr.push({
-          ...dateObj,
-          isDisabled: true,
-          date: dayjs(`${curDate.year()}-${curDate.month() + 2}-${i}`).format(this.format)
-        })
-      }
-      const tmp = lastMonthDateArr.concat(curMonthDateArr, nextMonthDateArr)
-      while (tmp.length) {
-        calendar.push(tmp.splice(0, 7))
-      }
-      this.calendar = calendar
-      // 初始化状态
-      this.changeSelectedStatus(this.time)
-    },
-    changeSelectedStatus (date) {
-      for (let i = 0; i < this.calendar.length; i++) {
-        for (let j = 0; j < this.calendar[i].length; j++) {
-          if (this.calendar[i][j].date === date) {
-            this.calendar[i][j].isSelected = true
-          } else {
-            this.calendar[i][j].isSelected = false
-          }
-        }
-      }
-    },
-    confirm (item) {
-      if (item.isDisabled) return 
-      this.time = item.date
-      this.changeSelectedStatus(item.date)
-      this.$nextTick(() => {
-        this.$refs.popover.hide()
-      })
-      this.$emit('change', item.date)
-    },
     clearTime () {
-      this.time = null
-      this.resetRangeDateCalendar()
-      this.$emit('input', null)
+      this.picker.time = null
       this.$nextTick(() => {
-        this.$refs.popover.hide()
+        this.$refs.tableDatePanel.resetRangeDateCalendar()
       })
-    },
-    resetRangeDateCalendar () {
-      for (let i = 0; i < this.calendar.length; i++) {
-        for (let j = 0; j < this.calendar[i].length; j++) {
-          this.calendar[i][j].isSelected = false
-          this.calendar[i][j].isHover = false
-        }
-      }
-    }
-  },
-  watch: {
-    calendarDate (val) {
-      this.generatCalendar(val)
+      this.picker.hide()
     }
   }
 }

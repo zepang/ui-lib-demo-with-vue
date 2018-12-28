@@ -57,7 +57,7 @@ import dayjs from 'dayjs'
 import Popover from '../popover'
 export default {
   name: 'RangeDatePicker',
-  inject: ['injectProps'],
+  inject: ['picker'],
   data () {
     return {
       isShow: false,
@@ -70,19 +70,19 @@ export default {
   },
   computed: {
     value () {
-      return this.injectProps.value
+      return this.picker.value
     },
     format () {
-      return this.injectProps.format
+      return this.picker.format
     },
     rangeSeparator () {
-      return this.injectProps.rangeSeparator
+      return this.picker.rangeSeparator
     },
     radius () {
-      return this.injectProps.radius
+      return this.picker.radius
     },
     clearable () {
-      return this.injectProps.clearable
+      return this.picker.clearable
     }
   },
   components: {
