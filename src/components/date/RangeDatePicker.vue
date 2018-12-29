@@ -20,9 +20,19 @@
       </span>
     </div>
     <table-date-panel
-      slot="content" 
+      v-if="picker.singleCalendar"
+      slot="content"
       ref="tableDatePanel"
       v-model="calendarDate"></table-date-panel>
+    <div class="calendar-list_wrapper" v-else slot="content">
+      <ul class="calendar-list" >
+        <li class="calendar-panel" v-for="(item, index) in calendarDate" :key="index">
+          <table-date-panel
+          ref="tableDatePanel"
+          v-model="calendarDate[index]"></table-date-panel>
+        </li>
+      </ul>
+    </div>
   </popover>
 </template>
 
@@ -40,6 +50,13 @@ export default {
       dayjs: dayjs,
       // 存储日历的时间列表
       calendar: []
+    }
+  },
+  created () {
+    if (this.picker.singleCalendar) {
+      this.calendarDate = dayjs()
+    } else {
+      this.calendarDate = [dayjs(), dayjs().add(1, 'month')]
     }
   },
   components: {
@@ -125,6 +142,23 @@ export default {
         outline: none;
       }
     }
+  }
+}
+
+.calendar-list__wrapper {
+  position: relative;
+}
+
+.calendar-list {
+  width: 200%;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  box-shadow: 0px 1px 10px 0px rgba(22, 24, 39, 0.08);
+  .calendar-panel {
+    width: 50%;
+    display: inline-block;
+    list-style: none;
   }
 }
 </style>

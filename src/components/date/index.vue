@@ -17,6 +17,10 @@ export default {
   },
   props: {
     value: [String, Array, Date],
+    singleCalendar: {
+      type: Boolean,
+      default: false
+    },
     type: {
       type: String,
       default: 'date'

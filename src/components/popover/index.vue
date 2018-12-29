@@ -47,6 +47,8 @@ export default {
 .popover__wrapper {
   position: relative;
   .content {
+    width: 100%;
+    min-width: 274px;
     position: absolute;
     top: 110%;
     z-index: 999;

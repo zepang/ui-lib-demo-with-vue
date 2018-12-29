@@ -56,11 +56,11 @@ export default {
     }
   },
   created () {
-    this.generatCalendar()
+    this.generatCalendar(this.value)
   },
   props: {
     value: {
-      type: [Object, Date],
+      type: [Object, Date, Array],
       default: dayjs()
     }
   },
@@ -209,7 +209,6 @@ export default {
 .base-calendar__wrapper {
   padding: 10px;
   box-sizing: border-box;
-  box-shadow: 0px 1px 10px 0px rgba(22, 24, 39, 0.08);
   font-size: 0;
   user-select: none;
   .calendar-title__wrapper {
