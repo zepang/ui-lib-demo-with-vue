@@ -9,7 +9,7 @@ import RangeDatePicker from './RangeDatePicker'
 export default {
   data () {
     return {
-      time: null
+      time: []
     }
   },
   provide() {

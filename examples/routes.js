@@ -5,6 +5,7 @@ import Switch from './pages/switch.vue'
 import Loading from './pages/loading.vue'
 import Select from './pages/select.vue'
 import Button from './pages/button.vue'
+import Form from './pages/form.vue'
 
 Vue.use(Router)
 
@@ -24,6 +25,10 @@ const routes = [
   {
     path: '/button',
     component: Button
+  },
+  {
+    path: '/form',
+    component: Form
   }
 ]
 
