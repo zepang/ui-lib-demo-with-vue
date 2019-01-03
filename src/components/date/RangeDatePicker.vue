@@ -6,14 +6,15 @@
       </span>
       <div class="input-group">
         <input 
-        v-model="picker.time[0]"
+        :value="picker.time[0]"
         placeholder="请选择日期"
-        type="text" readonly>
+        @blur="handleBlur"
+        type="text" >
         <span class="range-separator">{{picker.rangeSeparator}}</span>
         <input 
-        v-model="picker.time[1]"
+        :value="picker.time[1]"
         placeholder="请选择日期"
-        type="text" readonly>
+        type="text" >
       </div>
       <span v-if="picker.clearable && picker.time.length === 2" class="error-icon" @click.stop="clearTime">
         <i class="iconfont icon-error"></i>
@@ -64,6 +65,9 @@ export default {
     TableDatePanel
   },
   methods: {
+    handleBlur (e) {
+      console.log(e.target.value);
+    },
     clearTime () {
       this.picker.time = []
       this.$nextTick(() => {

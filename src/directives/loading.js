@@ -6,14 +6,20 @@ export default {
   inserted (el, binding, vnode, oldVnode) {
     const child = document.createElement('div')
     const loadingText = el.getAttribute('loading-text')
+    document.body.appendChild(child2)
     if (binding.arg === 'fullPage') {
       document.body.appendChild(child)
     } else {
       el.appendChild(child)
     }
-    const loading = new Loading({
-      el: child
-    })
+    // const loading = new Loading({
+    //   el: child
+    // })
+    const loading = new Vue({
+      render: (h) => {
+        return h(LoadingComponent)
+      }
+    }).$mount(child)
     if (loadingText) {
       loading.loadingText = loadingText
     }
