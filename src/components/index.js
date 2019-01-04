@@ -6,6 +6,7 @@ import DatePicker from './date'
 import Popover from './popover'
 import Form from './form/form'
 import FormItem from './form/form-item'
+import FormInput from './form/input'
 
 export default {
   Switch,
@@ -15,5 +16,6 @@ export default {
   DatePicker,
   Popover,
   Form,
-  FormItem
+  FormItem,
+  FormInput
 }

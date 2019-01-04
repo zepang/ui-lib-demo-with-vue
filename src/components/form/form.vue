@@ -4,20 +4,27 @@
   </form>
 </template>
 <script>
-import Emitter from '../../mixin/emitter'
 import EventBus from './EventBus'
 import A from './EventBus.1'
 import Vue from 'vue'
 export default {
   provide () {
-    return {EventBus, A}
+    return {
+      form: this
+    }
   },
-  beforeMount () {
-    A.add(1)
-    console.log(A);
-    console.log(this)
-    EventBus.$on('test')
-    console.log(EventBus);
+  data () {
+    return {
+      fields: []
+    }
+  },
+  created () {
+    EventBus.$on('on-form-item-add', (field) => {
+      if (field) this.fields.push(field)
+    })
+    EventBus.$on('on-form-item-remove', (field) => {
+      if (field) this.fields.splice(this.fields.indexOf(this), 1)
+    })
   },
   props: {
     model: {
@@ -25,6 +32,35 @@ export default {
     },
     rules: {
       type: Object
+    }
+  },
+  methods: {
+    // 公开方法：全部重置数据
+    resetFields() {
+      this.fields.forEach(field => {
+        field.resetField()
+      })
+    },
+    // 公开方法：全部校验数据，支持 Promise
+    validate(callback) {
+      return new Promise(resolve => {
+        let valid = true
+        let count = 0
+        this.fields.forEach(field => {
+          field.validate('', errors => {
+            if (errors) {
+              valid = false
+            }
+            if (++count === this.fields.length) {
+              // 全部完成
+              resolve(valid)
+              if (typeof callback === 'function') {
+                callback(valid)
+              }
+            }
+          })
+        })
+      })
     }
   }
 }

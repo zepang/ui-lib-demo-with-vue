@@ -1,12 +1,4 @@
-import Vue from 'vue'
-class A {
-  constructor () {
-    this.name = 123
-    this.event = []
-  }
-  add (name) {
-    this.event.push(name)
-  }
-}
+import A from './A'
+
 export default new A()
 

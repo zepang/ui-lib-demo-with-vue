@@ -1,6 +1,3 @@
 import Vue from 'vue'
-function create () {
-  return new Vue()
-}
-export default create()
+export default new Vue()
 
