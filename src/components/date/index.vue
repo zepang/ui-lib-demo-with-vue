@@ -61,7 +61,7 @@ export default {
       }
       if (this.value && this.value[0]) this.time = [dayjs(this.value[0]).format(this.format), dayjs(this.value[1]).format(this.format)]
     } else {
-      if (this.value) this.time = dayjs(this.value).format(this.format)
+      if (this.value) this.time = [dayjs(this.value).format(this.format)]
     }
   },
   computed: {
@@ -85,6 +85,7 @@ export default {
       this.$emit('change', val)
     },
     pickDate (val) {
+      if (this.type === 'rangeDate' && val.length !== 2) return
       console.log('index:', val);
       this.$emit('input', val)
       this.$emit('change', val)

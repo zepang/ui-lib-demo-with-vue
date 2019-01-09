@@ -52,10 +52,12 @@ export default {
       isShow: false,
       selectedDate: null,
       dayjs: dayjs,
-      calendar: []
+      calendar: [],
+      time: []
     }
   },
   created () {
+    this.time = []
     this.generatCalendar(this.value)
   },
   props: {
@@ -127,14 +129,9 @@ export default {
       }
       this.calendar = calendar
       // 初始化状态
-      this.changeSelectedStatus()
+      this.changeSelectedStatus(this.picker.time)
     },
     changeSelectedStatus (date) {
-      if (this.picker.time instanceof Array && this.picker.time.length) {
-        date = this.picker.time
-      } else {
-        date = [this.picker.time]
-      }
       for (let i = 0; i < this.calendar.length; i++) {
         for (let j = 0; j < this.calendar[i].length; j++) {
           if (~date.indexOf(this.calendar[i][j].date)) {
@@ -148,24 +145,18 @@ export default {
     selectDate (item) {
       if (item.isDisabled) return 
       let date = item.date
-      if (this.picker.type === 'dateRange') {
-        date = this.pickRangeDate(date)
-        this.picker.pickDate(date)
-        this.$nextTick(() => {
-          this.changeSelectedStatus(date)
-        })
-        if (this.picker.time.length === 2 && !this.picker.btnControler) {
-          this.picker.hide()
-        }
-      } else {
-        this.picker.pickDate(date)
-        this.$nextTick(() => {
-          this.changeSelectedStatus(date)
-        })
-
-        if (!this.picker.btnControler) {
-          this.picker.hide()
-        }
+      this.time.push(date)
+      if (this.picker.type === 'date' &&  this.time.length > 1) {
+        this.time.shift()
+      }
+      if (this.picker.type === 'dateRange' && this.time.length > 2) {
+        this.time.shift()
+        this.sortTime()
+      } 
+      this.changeSelectedStatus(this.time)
+      if (!this.picker.btnControler) {
+        this.picker.pickDate(this.time)
+        this.picker.hide()
       }
     },
     pickRangeDate (date) {
@@ -194,8 +185,25 @@ export default {
     changeCalendarDate (method, val, type) {
       this.$emit('input', dayjs(this.value)[method](val, type))
     },
-    confirm () {},
-    cancel () {}
+    sortTime () {
+      let tmp, len = this.time.length
+      for (let i = 0; i < len; i ++) {
+        for (let j = i + 1; j < len - i; j ++) {
+          if (this.time[i] > this.time[j]) {
+            tmp = this.time[i]
+            this.time[i] = this.time[j]
+            this.time[j] = tmp
+          }
+        }
+      }
+    },
+    confirm () {
+      this.picker.pickDate(this.time)
+      this.picker.hide()
+    },
+    cancel () {
+      this.picker.hide()
+    }
   },
   watch: {
     value (val) {
