@@ -85,10 +85,11 @@ export default {
       this.$emit('change', val)
     },
     pickDate (val) {
-      if (this.type === 'rangeDate' && val.length !== 2) return
+      if (this.type === 'dateRange' && val.length !== 2) return
       console.log('index:', val);
       this.$emit('input', val)
       this.$emit('change', val)
+      this.hide()
     },
     hide () {
       this.$nextTick(() => {

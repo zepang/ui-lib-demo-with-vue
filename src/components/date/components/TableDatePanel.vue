@@ -29,7 +29,7 @@
             :key="columnIndex" 
             :class="{
               'selected': column.isSelected,
-              'hover': isDateHover(column.date),
+              'hover': column.isHover,
               'disabled': column.isDisabled
             }"><span>{{dayjs(column.date).date()}}</span></td>
         </tr>
@@ -67,14 +67,6 @@ export default {
     }
   },
   methods: {
-    isDateHover (date) {
-      if (this.picker.type !== 'dateRange') return false
-      if (this.picker.time.length === 2 && dayjs(date).isAfter(this.picker.time[0]) && dayjs(date).isBefore(this.picker.time[1])) {
-        return true
-      } else {
-        return false
-      }
-    },
     /**
      * 生成日历数据和初始化日历的状态
      */
@@ -130,6 +122,7 @@ export default {
       this.calendar = calendar
       // 初始化状态
       this.changeSelectedStatus(this.picker.time)
+      this.changeHoverStatus(this.picker.time)
     },
     changeSelectedStatus (date) {
       for (let i = 0; i < this.calendar.length; i++) {
@@ -142,6 +135,19 @@ export default {
         }
       }
     },
+    changeHoverStatus (time) {
+      if (this.picker.type !== 'dateRange') return 
+      for (let i = 0; i < this.calendar.length; i++) {
+        for (let j = 0; j < this.calendar[i].length; j++) {
+          let date = this.calendar[i][j]
+          if (time.length === 2 && dayjs(date.date).isAfter(time[0]) && dayjs(date.date).isBefore(time[1])) {
+            date.isHover = true
+          } else {
+            date.isHover = false
+          }
+        }
+      }
+    },
     selectDate (item) {
       if (item.isDisabled) return 
       let date = item.date
@@ -149,14 +155,16 @@ export default {
       if (this.picker.type === 'date' &&  this.time.length > 1) {
         this.time.shift()
       }
-      if (this.picker.type === 'dateRange' && this.time.length > 2) {
-        this.time.shift()
+      if (this.picker.type === 'dateRange') {
+        if (this.time.length > 2) {
+          this.time.shift()
+        }
         this.sortTime()
       } 
       this.changeSelectedStatus(this.time)
+      this.changeHoverStatus(this.time)
       if (!this.picker.btnControler) {
         this.picker.pickDate(this.time)
-        this.picker.hide()
       }
     },
     pickRangeDate (date) {
@@ -188,8 +196,8 @@ export default {
     sortTime () {
       let tmp, len = this.time.length
       for (let i = 0; i < len; i ++) {
-        for (let j = i + 1; j < len - i; j ++) {
-          if (this.time[i] > this.time[j]) {
+        for (let j = i + 1; j < len; j ++) {
+          if (dayjs(this.time[i]).isAfter(dayjs(this.time[j]))) {
             tmp = this.time[i]
             this.time[i] = this.time[j]
             this.time[j] = tmp
@@ -199,7 +207,6 @@ export default {
     },
     confirm () {
       this.picker.pickDate(this.time)
-      this.picker.hide()
     },
     cancel () {
       this.picker.hide()
