@@ -7,6 +7,7 @@ import Select from './pages/select.vue'
 import Button from './pages/button.vue'
 import Form from './pages/form.vue'
 import Modal from './pages/modal.vue'
+import ImgLoader from './pages/imgLoader.vue'
 
 Vue.use(Router)
 
@@ -34,6 +35,10 @@ const routes = [
   {
     path: '/modal',
     component: Modal
+  },
+  {
+    path: '/imgLoader',
+    component: ImgLoader
   }
 ]
 

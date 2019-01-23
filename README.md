@@ -451,7 +451,7 @@ export default {
 新建 src/directives/loading.js
 ~~~js
 import Vue from 'vue'
-import LoadingComponent from '../components/loading.vue'
+import LoadingComponent from '../components/loading'
 const Loading = Vue.extend(LoadingComponent)
 
 export default {
@@ -487,7 +487,7 @@ export default {
 
 ~~~js
 import Vue from 'vue'
-import LoadingComponent from '../components/loading.vue'
+import LoadingComponent from '../components/loading'
 const Loading = Vue.extend(LoadingComponent)
 
 const loading = (options) => {

@@ -1,28 +1,27 @@
 import Vue from 'vue'
-import LoadingComponent from '../components/loading.vue'
+import LoadingComponent from '../components/loading'
 const Loading = Vue.extend(LoadingComponent)
 
 export default {
   inserted (el, binding, vnode, oldVnode) {
+    console.log(el)
     const child = document.createElement('div')
     const loadingText = el.getAttribute('loading-text')
-    document.body.appendChild(child2)
     if (binding.arg === 'fullPage') {
       document.body.appendChild(child)
     } else {
       el.appendChild(child)
     }
-    // const loading = new Loading({
-    //   el: child
-    // })
-    const loading = new Vue({
-      render: (h) => {
-        return h(LoadingComponent)
+    const loading = new Loading({
+      el: child,
+      data () {
+        return {
+          isShow: binding.value,
+          loadingText: loadingText
+        }
       }
-    }).$mount(child)
-    if (loadingText) {
-      loading.loadingText = loadingText
-    }
+    })
+    console.dir(loading)
     el.loading = loading
   },
   update (el, binding, vnode, oldVnode) {

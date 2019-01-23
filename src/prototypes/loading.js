@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import LoadingComponent from '../components/loading.vue'
+import LoadingComponent from '../components/loading'
 const Loading = Vue.extend(LoadingComponent)
 
 const loading = (options) => {

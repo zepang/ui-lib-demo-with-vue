@@ -8,6 +8,7 @@ import Form from './form/form'
 import FormItem from './form/form-item'
 import FormInput from './form/input'
 import Modal from './modal'
+import ImgLoader from './imgLoader'
 
 export default {
   Switch,
@@ -19,5 +20,6 @@ export default {
   Form,
   FormItem,
   FormInput,
-  Modal
+  Modal,
+  ImgLoader
 }
