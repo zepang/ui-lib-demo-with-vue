@@ -6,6 +6,7 @@ import Loading from './pages/loading.vue'
 import Select from './pages/select.vue'
 import Button from './pages/button.vue'
 import Form from './pages/form.vue'
+import Modal from './pages/modal.vue'
 
 Vue.use(Router)
 
@@ -29,6 +30,10 @@ const routes = [
   {
     path: '/form',
     component: Form
+  },
+  {
+    path: '/modal',
+    component: Modal
   }
 ]
 

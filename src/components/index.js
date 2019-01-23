@@ -7,6 +7,7 @@ import Popover from './popover'
 import Form from './form/form'
 import FormItem from './form/form-item'
 import FormInput from './form/input'
+import Modal from './modal'
 
 export default {
   Switch,
@@ -17,5 +18,6 @@ export default {
   Popover,
   Form,
   FormItem,
-  FormInput
+  FormInput,
+  Modal
 }
