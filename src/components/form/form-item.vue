@@ -8,11 +8,13 @@
   </div>
 </template>
 <script>
-import EventBus from './EventBus'
+import Emitter from './Emitter'
 import Vue from 'vue'
 import AsyncValidator from 'async-validator'
 export default {
+  name: 'form-item',
   inject: ['form'],
+  mixins: [Emitter],
   props: {
     label: {
       type: String,
@@ -36,12 +38,12 @@ export default {
     }
   },
   created () {
-    EventBus.$emit('on-form-item-remove', this)
+    this.dispatch('form', 'on-form-item-remove', this)
   },
   mounted () {
     if (this.prop) {
       // 如果没有传入 prop，则无需校验，也就无需缓存
-      EventBus.$emit('on-form-item-add', this)
+      this.dispatch('form', 'on-form-item-add', this)
       let rules = this.getRules()
       if (rules.length) {
         rules.every((rule) => {
@@ -49,8 +51,8 @@ export default {
           this.isRequired = rule.required
         })
       }
-      EventBus.$on('on-form-change', this.onFieldChange)
-      EventBus.$on('on-form-blur', this.onFieldBlur)
+      this.$on('on-form-change', this.onFieldChange)
+      this.$on('on-form-blur', this.onFieldBlur)
       // 设置初始值，以便在重置时恢复默认值
       this.initialValue = this.fieldValue
     }

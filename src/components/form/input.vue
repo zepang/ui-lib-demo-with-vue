@@ -2,13 +2,14 @@
   <input type="text" :value="currentValue" @input="handleInput" @blur="handleBlur">
 </template>
 <script>
-import EventBus from './EventBus'
+import Emitter from './Emitter'
 export default {
   data () {
     return {
       currentValue: this.value
     }
   },
+  mixins: [Emitter],
   props: {
     type: String,
     default: ''
@@ -23,10 +24,10 @@ export default {
       let value = e.target.value
       this.currentValue = value
       this.$emit('input', value)
-      EventBus.$emit('on-form-change', value)
+      this.dispatch('form-item', 'on-form-change', value)
     },
     handleBlur (e) {
-      EventBus.$emit('on-form-blur', this.currentValue)
+      this.dispatch('form-item', 'on-form-blur', this.currentValue)
     }
   }
 }

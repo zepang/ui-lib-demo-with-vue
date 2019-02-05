@@ -4,9 +4,9 @@
   </form>
 </template>
 <script>
-import EventBus from './EventBus'
 import Vue from 'vue'
 export default {
+  name: 'form',
   provide () {
     return {
       form: this
@@ -18,10 +18,10 @@ export default {
     }
   },
   created () {
-    EventBus.$on('on-form-item-add', (field) => {
+    this.$on('on-form-item-add', (field) => {
       if (field) this.fields.push(field)
     })
-    EventBus.$on('on-form-item-remove', (field) => {
+    this.$on('on-form-item-remove', (field) => {
       if (field) this.fields.splice(this.fields.indexOf(this), 1)
     })
   },
