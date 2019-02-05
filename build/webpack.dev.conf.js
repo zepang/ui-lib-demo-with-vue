@@ -2,7 +2,6 @@ const path = require('path')
 const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 var ansiColors = {
   red: '00FF00' // note the lack of "#"
 }
@@ -75,7 +74,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new FriendlyErrorsWebpackPlugin(),
     // 最新的 vue-loader（15.0以后吧） 需要引入这个插件
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
