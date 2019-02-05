@@ -5,7 +5,6 @@
 </template>
 <script>
 import EventBus from './EventBus'
-import A from './EventBus.1'
 import Vue from 'vue'
 export default {
   provide () {

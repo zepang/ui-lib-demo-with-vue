@@ -9,7 +9,6 @@
 </template>
 <script>
 import EventBus from './EventBus'
-import A from './EventBus.1'
 import Vue from 'vue'
 import AsyncValidator from 'async-validator'
 export default {
