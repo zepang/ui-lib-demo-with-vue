@@ -1,12 +1,31 @@
 <template>
-  <label for="checkbox" class="lai-checkbox__wrapper" 
+  <label class="lai-checkbox__wrapper" 
     :class="{'lai-checkbox__checked': isChecked, 'lai-checkbox_disabled': disabled}">
     <span class="lai-checkbox__icon iconfont" :class="{'icon-check': isChecked}"></span>
-    <input hidden :disabled="disabled" type="checkbox" class="lai-checkbox__input" :checked="isChecked" id="checkbox" @input="handleInput">
+    <input 
+      v-if="group"
+      :value="label"
+      hidden :disabled="disabled" 
+      type="checkbox" 
+      class="lai-checkbox__input" 
+      v-model="model"
+      @change="handleInput">
+    <input 
+      v-else
+      hidden :disabled="disabled" 
+      type="checkbox" 
+      class="lai-checkbox__input" 
+      :checked="isChecked" 
+      @change="handleInput">
     <span class="lai-checkbox__label"><slot>复选框</slot></span>
   </label>
 </template>
 <script>
+/**
+ * 在写复选框的时候发现一个问题，用change监听input，事件v-model绑定的值更新之后触发，
+ * 而用input监听，则会在v-model绑定的值更新之前触发
+ */
+import { findParent } from '../../utils'
 export default {
   name: 'lai-checkbox',
   props: {
@@ -17,17 +36,39 @@ export default {
     disabled: {
       type: [Boolean, String, Number],
       default: false
+    },
+    label: {
+      type: [Boolean, String, Number]
     }
   },
   data () {
     return {
+      parent: null,
+      model: [],
+      group: false,
       isChecked: this.value || false
     }
   },
+  mounted () {
+    this.checkGroup()
+  },
   methods: {
+    checkGroup () {
+      this.parent = findParent(this, 'lai-checkbox-group')
+      if (this.parent) {
+        this.group = true
+      }
+    },
     handleInput (e) {
-      this.$emit('input', e.target.checked)
-      this.$emit('on-change', e.target.checked)
+      if (this.disabled) {
+        return false
+      }
+      if (this.group) {
+        this.parent.updateModel(this.model)
+      } else {
+        this.$emit('input', e.target.checked)
+        this.$emit('on-change', e.target.checked)
+      }
     }
   },
   watch: {

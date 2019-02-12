@@ -10,6 +10,7 @@ import FormInput from './form/input'
 import Modal from './modal'
 import ImgLoader from './imgLoader'
 import Checkbox from './checkbox'
+import CheckboxGroup from './checkboxGroup'
 
 export default {
   Switch,
@@ -23,5 +24,6 @@ export default {
   FormInput,
   Modal,
   ImgLoader,
-  Checkbox
+  Checkbox,
+  CheckboxGroup
 }

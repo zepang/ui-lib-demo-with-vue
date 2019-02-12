@@ -14,6 +14,16 @@
     <div>
       <lai-checkbox v-model="checkbox" :disabled="true"></lai-checkbox>
     </div>
+    <div>
+      <lai-checkbox-group v-model="model" @on-change="changeCheckbox">
+        <lai-form>
+          <lai-checkbox :label="1"></lai-checkbox>
+          <lai-checkbox :label="2"></lai-checkbox>
+          <lai-checkbox :label="3"></lai-checkbox>
+          <lai-checkbox :label="4"></lai-checkbox>
+        </lai-form>
+      </lai-checkbox-group>
+    </div>
   </div>
 </template>
 
@@ -22,6 +32,7 @@ export default {
   naem: 'App',
   data () {
     return {
+      model: [1,2,3,4],
       checkbox: true,
       time: [new Date(), new Date()],
       time2: new Date()
@@ -30,6 +41,9 @@ export default {
   methods: {
     handleChange (val) {
       console.log('app:', val)
+    },
+    changeCheckbox (value) {
+      console.log(value)
     }
   }
 }

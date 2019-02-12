@@ -6,7 +6,7 @@
 <script>
 import Vue from 'vue'
 export default {
-  name: 'form',
+  name: 'lai-form',
   provide () {
     return {
       form: this

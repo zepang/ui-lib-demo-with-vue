@@ -45,7 +45,8 @@ export function findChildren (comp, compName) {
       if (child.$options.name === compName) {
         result.push(child)
       } else {
-        result.concat(findChildren(child, compName))
+        let res = findChildren(child, compName)
+        result = result.concat(res)
       }
     }
   }
