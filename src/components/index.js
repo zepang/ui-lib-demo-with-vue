@@ -9,6 +9,7 @@ import FormItem from './form/form-item'
 import FormInput from './form/input'
 import Modal from './modal'
 import ImgLoader from './imgLoader'
+import Checkbox from './checkbox'
 
 export default {
   Switch,
@@ -21,5 +22,6 @@ export default {
   FormItem,
   FormInput,
   Modal,
-  ImgLoader
+  ImgLoader,
+  Checkbox
 }
