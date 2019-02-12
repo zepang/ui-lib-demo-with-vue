@@ -12,7 +12,7 @@
       <lai-date-picker v-model="time2" format="YYYY-MM-DD" type="date" :btnControler="false" :monthControler="false" :yearControler="false"  @change="handleChange"></lai-date-picker>
     </div>
     <div>
-      <lai-checkbox v-model="checkbox"></lai-checkbox>
+      <lai-checkbox v-model="checkbox" :disabled="true"></lai-checkbox>
     </div>
   </div>
 </template>
