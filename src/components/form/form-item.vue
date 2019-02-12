@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="lai-form-item">
     <label v-if="label" :class="{'lai-form-item-label__required': isRequired}">{{ label }}</label>
     <div>
       <slot></slot>
@@ -89,9 +89,7 @@ export default {
 
       validator.validate(model, { firstFields: true }, errors => {
         this.validateState = !errors ? 'success' : 'error'
-        console.log(errors);
         this.validateMessage = errors ? errors[0].message : ''
-
         callback(this.validateMessage)
       })
     },
@@ -113,12 +111,18 @@ export default {
 </script>
 
 <style scoped>
+.lai-form-item {
+  position: relative;
+  margin-bottom: 20px;
+}
 .lai-form-item-label__required:before {
   content: '*';
   color: red;
 }
 .lai-form-item__message {
+  position: absolute;
   color: red;
+  font-size: 12px;
 }
 </style>
 

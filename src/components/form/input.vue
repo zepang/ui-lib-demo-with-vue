@@ -1,5 +1,5 @@
 <template>
-  <input type="text" :value="currentValue" @input="handleInput" @blur="handleBlur">
+  <input class="lai-input" type="text" :value="currentValue" @input="handleInput" @blur="handleBlur">
 </template>
 <script>
 import Emitter from './Emitter'
@@ -32,3 +32,15 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+input[type="text"] {
+  height: 32px;
+  box-sizing: border-box;
+  font-size: 14px;
+  padding: 4px 6px;
+  &:focus {
+    outline-color: #535ef5;
+  }
+}
+</style>
+
