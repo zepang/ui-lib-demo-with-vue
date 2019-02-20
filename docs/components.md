@@ -1,4 +1,0 @@
-# button
-# switch
-# select
-# loading
