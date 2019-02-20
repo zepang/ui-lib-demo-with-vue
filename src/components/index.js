@@ -11,6 +11,7 @@ import Modal from './modal'
 import ImgLoader from './imgLoader'
 import Checkbox from './checkbox'
 import CheckboxGroup from './checkboxGroup'
+import Alert from './alert'
 
 export default {
   Switch,
@@ -25,5 +26,6 @@ export default {
   Modal,
   ImgLoader,
   Checkbox,
-  CheckboxGroup
+  CheckboxGroup,
+  Alert
 }

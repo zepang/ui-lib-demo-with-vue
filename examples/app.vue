@@ -38,6 +38,16 @@ export default {
       time2: new Date()
     }
   },
+  mounted () {
+    this.$alert({
+      content: '122334',
+       duration: 4000
+    })
+    this.$alert({
+      content: '122334',
+       duration: 2000
+    })
+  },
   methods: {
     handleChange (val) {
       console.log('app:', val)
