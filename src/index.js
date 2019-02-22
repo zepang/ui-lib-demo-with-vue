@@ -10,7 +10,7 @@ import prototypes from './prototypes'
 import { camlToParam } from './utils'
 
 export default {
-  install (Vue, options) {
+  install: function laiUIInstall (Vue, options) {
     // 注册组件
     for (let key in components) {
       Vue.component(`lai${camlToParam(key)}`, components[key])
