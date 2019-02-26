@@ -1,0 +1,39 @@
+<template>
+  <table>
+    <caption>A summary of the UK's most famous punk bands</caption>
+    <thead>
+      <tr>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>1</th>
+        <td>1.1</td>
+        <td>1.2</td>
+        <td>1.3</td>
+      </tr>
+      <tr>
+        <th>1</th>
+        <td>1.1</td>
+        <td>1.2</td>
+        <td>1.3</td>
+      </tr>
+      <tr>
+        <th>1</th>
+        <td>1.1</td>
+        <td>1.2</td>
+        <td>1.3</td>
+      </tr>
+      <tr>
+        <th>1</th>
+        <td>1.1</td>
+        <td>1.2</td>
+        <td>1.3</td>
+      </tr>
+    </tbody>
+  </table>
+</template>

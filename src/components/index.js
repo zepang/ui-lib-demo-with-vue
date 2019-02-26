@@ -12,6 +12,7 @@ import ImgLoader from './imgLoader'
 import Checkbox from './checkbox'
 import CheckboxGroup from './checkboxGroup'
 import Alert from './alert'
+import Table from './table'
 
 export default {
   Switch,
@@ -27,5 +28,6 @@ export default {
   ImgLoader,
   Checkbox,
   CheckboxGroup,
-  Alert
+  Alert,
+  Table
 }

@@ -8,6 +8,7 @@ import Button from './pages/button.vue'
 import Form from './pages/form.vue'
 import Modal from './pages/modal.vue'
 import ImgLoader from './pages/imgLoader.vue'
+import Table from './pages/table.vue'
 
 Vue.use(Router)
 
@@ -39,6 +40,10 @@ const routes = [
   {
     path: '/imgLoader',
     component: ImgLoader
+  },
+  {
+    path: '/table',
+    conponent: Table
   }
 ]
 
