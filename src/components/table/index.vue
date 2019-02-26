@@ -1,39 +1,30 @@
 <template>
   <table>
-    <caption>A summary of the UK's most famous punk bands</caption>
+    <caption>Title</caption>
     <thead>
       <tr>
-        <th>1</th>
-        <th>2</th>
-        <th>3</th>
-        <th>4</th>
+        <th v-for="(col, colIndex) in columns" :key="colIndex">{{ col.title }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th>1</th>
-        <td>1.1</td>
-        <td>1.2</td>
-        <td>1.3</td>
-      </tr>
-      <tr>
-        <th>1</th>
-        <td>1.1</td>
-        <td>1.2</td>
-        <td>1.3</td>
-      </tr>
-      <tr>
-        <th>1</th>
-        <td>1.1</td>
-        <td>1.2</td>
-        <td>1.3</td>
-      </tr>
-      <tr>
-        <th>1</th>
-        <td>1.1</td>
-        <td>1.2</td>
-        <td>1.3</td>
+      <tr v-for="(row, rowIndex) in data" :key="rowIndex">
+        <td v-for="(col, i) in columns" :key="i">{{ row[col.key] }}</td>
       </tr>
     </tbody>
   </table>
 </template>
+
+<script>
+export default {
+  props: {
+    columns: {
+      type: Array,
+      default: () => {}
+    },
+    data: {
+      type: Array,
+      default: () => {}
+    }
+  }
+}
+</script>

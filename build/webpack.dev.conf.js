@@ -78,7 +78,8 @@ module.exports = {
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       title: 'LAIUI',
-      template: 'index.html'
+      template: 'index.html',
+      favicon: 'favicon.ico'
     }),
     // 热重载插件 
     new webpack.HotModuleReplacementPlugin()

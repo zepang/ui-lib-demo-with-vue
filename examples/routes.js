@@ -43,7 +43,7 @@ const routes = [
   },
   {
     path: '/table',
-    conponent: Table
+    component: Table
   }
 ]
 
