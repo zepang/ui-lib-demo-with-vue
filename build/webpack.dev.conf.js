@@ -18,7 +18,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name][hash:8].bundle.js'
+    filename: '[name][hash:8].bundle.js',
+    publicPath: '/'
   },
   resolve: {
     alias: {
