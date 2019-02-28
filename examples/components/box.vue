@@ -5,8 +5,7 @@
 </template>
 <style lang="less" scoped>
 .box {
-  min-width: 50%;
-  width: 50%;
+  display: inline-block;
   padding: 2em;
   box-shadow: 0px 0px 4px 1px #eee;
   &:hover {
