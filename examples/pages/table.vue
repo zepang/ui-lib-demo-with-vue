@@ -48,7 +48,17 @@ export default {
         },
         {
           title: '出生日期',
-          key: 'birthday'
+          key: 'birthday',
+          render: (h, { row, column, index }) => {
+            const date = new Date(parseInt(row.birthday))
+            const year = date.getFullYear()
+            const month = date.getMonth() + 1
+            const day = date.getDate()
+            
+            const birthday = `${year}-${month}-${day}`
+            
+            return h('span', birthday)
+          }
         },
         {
           title: '地址',

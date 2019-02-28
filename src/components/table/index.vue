@@ -8,13 +8,21 @@
     </thead>
     <tbody>
       <tr v-for="(row, rowIndex) in data" :key="rowIndex">
-        <td v-for="(col, i) in columns" :key="i">{{ row[col.key] }}</td>
+        <td v-for="(col, i) in columns" :key="i">
+          <template v-if="'render' in col">
+            <render :row="row" :column="col" :index="rowIndex" :render="col.render"></render>
+          </template>
+          <template v-else>
+            {{ row[col.key] }}
+          </template>
+        </td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script>
+import Render from './render'
 export default {
   props: {
     columns: {
@@ -25,7 +33,8 @@ export default {
       type: Array,
       default: () => {}
     }
-  }
+  },
+  components: { Render }
 }
 </script>
 <style lang="less" scoped>
