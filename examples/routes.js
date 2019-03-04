@@ -9,6 +9,7 @@ import Form from './pages/form.vue'
 import Modal from './pages/modal.vue'
 import ImgLoader from './pages/imgLoader.vue'
 import Table from './pages/table.vue'
+import Tree from './pages/tree.vue'
 
 Vue.use(Router)
 
@@ -44,6 +45,10 @@ const routes = [
   {
     path: '/table',
     component: Table
+  },
+  {
+    path: '/tree',
+    component: Tree
   }
 ]
 

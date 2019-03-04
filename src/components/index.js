@@ -13,6 +13,7 @@ import Checkbox from './checkbox'
 import CheckboxGroup from './checkboxGroup'
 import Alert from './alert'
 import Table from './table'
+import Tree from './tree'
 
 export default {
   Switch,
@@ -29,5 +30,5 @@ export default {
   Checkbox,
   CheckboxGroup,
   Alert,
-  Table
+  Tree
 }

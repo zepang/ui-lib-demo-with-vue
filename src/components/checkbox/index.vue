@@ -17,7 +17,7 @@
       class="lai-checkbox__input" 
       :checked="isChecked" 
       @change="handleInput">
-    <span class="lai-checkbox__label"><slot>复选框</slot></span>
+    <span class="lai-checkbox__label"><slot>{{label}}</slot></span>
   </label>
 </template>
 <script>
@@ -38,7 +38,8 @@ export default {
       default: false
     },
     label: {
-      type: [Boolean, String, Number]
+      type: [Boolean, String, Number],
+      default: ''
     }
   },
   data () {
