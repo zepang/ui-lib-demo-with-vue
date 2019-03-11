@@ -17,15 +17,17 @@ module.exports = {
         collapsable: false,
         children: [
           '/posts/tutorial/instruction',
-          '/posts/tutorial/prerequsites',
+          // '/posts/tutorial/prerequsites',
           '/posts/tutorial/basic',
+          '/posts/tutorial/communication',
         ]
       },
       {
         title: '组件',
         collapsable: false,
         children: [
-          '/posts/components/button'
+          '/posts/components/button',
+          '/posts/components/message'
         ]
       }
     ]

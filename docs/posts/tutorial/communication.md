@@ -14,9 +14,9 @@
 
   - `$attrs` 和 `$listeners`
   
-* 兄弟关系
+* 兄弟关系或者说没有任何关系的组件
 
-  `eventBus`
+  - `eventBus`
 
-  `vuex`这一类的状态管理库
+  - `vuex`这一类的状态管理库
 
