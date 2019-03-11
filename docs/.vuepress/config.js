@@ -1,12 +1,12 @@
 module.exports = {
   title: 'Components Learning With Vue',
   head: [
-    ['link', { rel: 'icon', href: '/img/logo.png' }]
+    ['link', { rel: 'icon', href: '/img/favicon.ico' }]
   ],
   serviceWorker: false,
   themeConfig: {
     nav: [
-      { text: 'Home', link: '/' },
+      // { text: 'Home', link: '/' },
       { text: 'documents', link: '/posts/' },
       { text: 'github', link: 'https://google.com' },
     ],

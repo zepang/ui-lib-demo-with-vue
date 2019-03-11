@@ -14,6 +14,7 @@ import CheckboxGroup from './checkboxGroup'
 import Alert from './alert'
 import Table from './table'
 import Tree from './tree'
+import Slider from './slider'
 
 export default {
   Switch,
@@ -30,5 +31,6 @@ export default {
   Checkbox,
   CheckboxGroup,
   Alert,
-  Tree
+  Tree,
+  Slider
 }
