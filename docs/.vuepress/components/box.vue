@@ -5,7 +5,7 @@
 </template>
 <style lang="less" scoped>
 .box {
-  display: inline-block;
+  // display: inline-block;
   margin: 1em 0;
   padding: 2em;
   border-radius: 0.3em;

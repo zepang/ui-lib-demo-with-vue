@@ -16,10 +16,17 @@ module.exports = {
         title: '组件实践',
         collapsable: false,
         children: [
-          '/posts/tutorial/instruction',
+          '/posts/tutorial/1',
           // '/posts/tutorial/prerequsites',
-          '/posts/tutorial/basic',
-          '/posts/tutorial/communication',
+          '/posts/tutorial/2',
+          '/posts/tutorial/3',
+          '/posts/tutorial/4',
+          '/posts/tutorial/5',
+          '/posts/tutorial/6',
+          '/posts/tutorial/7',
+          '/posts/tutorial/8',
+          '/posts/tutorial/9',
+          '/posts/tutorial/10',
         ]
       },
       {
