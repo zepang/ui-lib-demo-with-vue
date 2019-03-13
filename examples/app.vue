@@ -2,10 +2,12 @@
   <div id="app">
     <!-- <img class="avatar" src="../src/assets/images/cache_user_icon.jpg" alt=""> -->
     <router-view></router-view>
+    <lai-button @click.native="openModal">Modal</lai-button>
   </div>
 </template>
 
 <script>
+import './components/Modal'
 export default {
   naem: 'App',
   mounted () {
@@ -17,6 +19,14 @@ export default {
       content: '122334',
        duration: 2000
     })
+  },
+  methods: {
+    openModal () {
+      let modal = new Modal({
+        content: '12344444'
+      })
+      modal.open()
+    }
   }
 }
 </script>
