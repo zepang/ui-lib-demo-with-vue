@@ -34,7 +34,8 @@ module.exports = {
         collapsable: false,
         children: [
           '/posts/components/button',
-          '/posts/components/message'
+          '/posts/components/message',
+          '/posts/components/modal'
         ]
       }
     ]
