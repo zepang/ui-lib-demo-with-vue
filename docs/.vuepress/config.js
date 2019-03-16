@@ -1,4 +1,5 @@
 module.exports = {
+  base: '/lai-ui/',
   title: 'Components Learning With Vue',
   head: [
     ['link', { rel: 'icon', href: '/img/favicon.ico' }]
@@ -8,7 +9,7 @@ module.exports = {
     nav: [
       { text: 'Home', link: '/' },
       { text: 'documents', link: '/posts/' },
-      { text: 'github', link: 'https://google.com' },
+      { text: 'github', link: 'https://github.com/zepang/lai-ui' },
     ],
     sidebar: [
       '/posts/',
@@ -40,5 +41,10 @@ module.exports = {
         ]
       }
     ]
+  },
+  configureWebpack: (config, isServer) => {
+    if (!isServer) {
+      config.output.publicPath = '/lai-ui/'
+    }
   }
 }
