@@ -4,7 +4,7 @@
 
 ##### 示例
 <box>
-<modal-demo></modal-demo>
+<!-- <modal-demo></modal-demo> -->
 </box>
 
 ##### 代码
