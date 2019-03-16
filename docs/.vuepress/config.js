@@ -6,7 +6,7 @@ module.exports = {
   serviceWorker: false,
   themeConfig: {
     nav: [
-      // { text: 'Home', link: '/' },
+      { text: 'Home', link: '/' },
       { text: 'documents', link: '/posts/' },
       { text: 'github', link: 'https://google.com' },
     ],
@@ -30,12 +30,13 @@ module.exports = {
         ]
       },
       {
-        title: '组件',
+        title: '组件案例',
         collapsable: false,
         children: [
           '/posts/components/button',
           '/posts/components/message',
-          '/posts/components/modal'
+          '/posts/components/modal',
+          '/posts/components/checkbox'
         ]
       }
     ]

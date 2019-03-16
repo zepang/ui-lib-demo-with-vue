@@ -88,7 +88,7 @@ export default {
   font-size: 14px;
   &.lai-checkbox__checked {
     .lai-checkbox__icon {
-      background-color: #535ef5;
+      background-color: #097cff;
     }
   }
   &.lai-checkbox_disabled {
