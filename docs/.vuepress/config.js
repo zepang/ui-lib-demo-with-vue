@@ -37,7 +37,8 @@ module.exports = {
           '/posts/components/button',
           '/posts/components/message',
           '/posts/components/modal',
-          '/posts/components/checkbox'
+          '/posts/components/checkbox',
+          '/posts/components/tree'
         ]
       }
     ]
