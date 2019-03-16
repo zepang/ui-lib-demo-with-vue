@@ -38,7 +38,8 @@ module.exports = {
           '/posts/components/message',
           '/posts/components/modal',
           '/posts/components/checkbox',
-          '/posts/components/tree'
+          '/posts/components/tree',
+          '/posts/components/date'
         ]
       }
     ]

@@ -10,6 +10,7 @@ import Modal from './pages/modal.vue'
 import ImgLoader from './pages/imgLoader.vue'
 import Table from './pages/table.vue'
 import Tree from './pages/tree.vue'
+import Date from './pages/date.vue'
 
 Vue.use(Router)
 
@@ -49,6 +50,10 @@ const routes = [
   {
     path: '/tree',
     component: Tree
+  },
+  {
+    path: '/date',
+    component: Date
   }
 ]
 
