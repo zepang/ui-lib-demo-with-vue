@@ -1,6 +1,6 @@
 <template>
   <div>
-    <lai-button @click.native="value = !vlaue">Toggle Modal</lai-button>
+    <lai-button @click.native="value = !value">Toggle Modal</lai-button>
     <lai-modal v-model="value"></lai-modal>
   </div>
 </template>
