@@ -4,7 +4,12 @@
       <div class="lai-modal-overlay" v-if="overlay && isShow"></div>
     </transition>
     <transition name="fade-modal">
-      <div class="lai-modal" v-if="isShow" v-click-outside="hide" style="min-width: 560px; min-height: 280px;">
+      <div
+        class="lai-modal"
+        v-if="isShow"
+        v-click-outside="hide"
+        style="min-width: 560px; min-height: 280px;"
+      >
         <button class="modal-close close-button" @click="hide">x</button>
         <div class="modal-content">
           <slot></slot>
@@ -14,7 +19,7 @@
   </div>
 </template>
 <script>
-import clickOutside from '../../directives/click-outside'
+import clickOutside from "../../directives/click-outside";
 export default {
   props: {
     overlay: {
@@ -30,32 +35,31 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
-      isShow: this.value,
-    }
+      isShow: this.value
+    };
   },
   directives: {
-    'click-outside': clickOutside
+    "click-outside": clickOutside
   },
   methods: {
-    hide () {
-      this.isShow = false
-      this.$emit('input', this.isShow)
+    hide() {
+      this.isShow = false;
+      this.$emit("input", this.isShow);
     }
   },
   watch: {
-    value (val) {
+    value(val) {
       if (this.ishow !== val) {
-        this.isShow = val
+        this.isShow = val;
       }
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-
 .modal-wrapper {
   position: absolute;
   top: 0;
@@ -71,7 +75,7 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 99;
-    background-color: rgba(0,0,0,.4);
+    background-color: rgba(0, 0, 0, 0.4);
     z-index: 90;
   }
   .modal-main {
@@ -86,7 +90,7 @@ export default {
     height: 300px;
     background-color: #ffffff;
     border-radius: 4px;
-    box-shadow: 0px 0px 6px rgba(0, 0, 0, .1);
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -136,19 +140,23 @@ export default {
   }
 }
 
-.fade-overlay-enter, .fade-overlay-leave-to {
+.fade-overlay-enter,
+.fade-overlay-leave-to {
   display: block;
   opacity: 0;
 }
-.fade-overlay-enter-active, .fade-overlay-leave-active {
+.fade-overlay-enter-active,
+.fade-overlay-leave-active {
   transition: 500ms opacity 500ms ease;
 }
-.fade-overlay-enter-to, .fade-overlay-leave {
+.fade-overlay-enter-to,
+.fade-overlay-leave {
   display: block;
   opacity: 1;
 }
 
-.fade-modal-enter, .fade-modal-leave-to {
+.fade-modal-enter,
+.fade-modal-leave-to {
   top: -300vh;
 }
 .fade-modal-enter-active {
@@ -157,7 +165,8 @@ export default {
 .fade-modal-leave-active {
   transition: 500ms top ease;
 }
-.fade-modal-enter-to, .fade-modal-leave {
+.fade-modal-enter-to,
+.fade-modal-leave {
   top: 50%;
   opacity: 1;
 }
