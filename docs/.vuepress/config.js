@@ -29,7 +29,7 @@ module.exports = {
         ]
       },
       {
-        title: "组件案例",
+        title: "样例组件",
         collapsable: false,
         children: [
           "/posts/components/button",

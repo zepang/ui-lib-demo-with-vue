@@ -13,7 +13,7 @@
   * **组件介绍**
   * **组件基础**
   * **组件通信**
-  * <del>全局组件</del>
+  * **全局组件**
   * <del>无渲染组件</del>
   * <del>render函数组件</del>
   * <del>递归组件</del>
@@ -21,10 +21,11 @@
   * <del>组件构建</del>
   * <del>组件发布</del>
 
-- 组件
+- 样例组件
   
   * Button 按钮组件
   * Alert 消息组件
-  * Tree 树形组件
   * Modal 模态框组件
-  * form 表单验证组件
+  * Checkbox 复选框组件
+  * Tree 树形组件
+  * DatePicker 日期选择组件

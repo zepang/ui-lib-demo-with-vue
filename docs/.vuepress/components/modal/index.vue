@@ -12,7 +12,7 @@
       >
         <button class="modal-close close-button" @click="hide">x</button>
         <div class="modal-content">
-          <slot></slot>
+          <slot>{{content}}</slot>
         </div>
       </div>
     </transition>
@@ -33,6 +33,10 @@ export default {
     styles: {
       type: Object,
       default: () => {}
+    },
+    content: {
+      type: String,
+      default: 'content'
     }
   },
   data() {
