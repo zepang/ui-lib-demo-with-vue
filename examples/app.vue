@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <img class="avatar" src="../src/assets/images/cache_user_icon.jpg" alt=""> -->
     <router-view></router-view>
-    <lai-button @click.native="openModal">Modal</lai-button>
+    <!-- <lai-button @click.native="openModal">Modal</lai-button> -->
   </div>
 </template>
 

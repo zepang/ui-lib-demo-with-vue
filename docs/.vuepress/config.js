@@ -47,6 +47,5 @@ module.exports = {
       config.output.publicPath =
         process.env.NODE_ENV === "production" ? "/lai-ui/" : "/" 
     }
-    console.log(config)
   }
 }

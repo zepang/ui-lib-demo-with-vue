@@ -11,6 +11,7 @@ import ImgLoader from './pages/imgLoader.vue'
 import Table from './pages/table.vue'
 import Tree from './pages/tree.vue'
 import Date from './pages/date.vue'
+import InputTags from './pages/InputTags.vue'
 
 Vue.use(Router)
 
@@ -54,6 +55,10 @@ const routes = [
   {
     path: '/date',
     component: Date
+  },
+  {
+    path: '/input-tags',
+    component: InputTags
   }
 ]
 
