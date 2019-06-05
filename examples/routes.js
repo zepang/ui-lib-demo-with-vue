@@ -12,6 +12,7 @@ import Table from './pages/table.vue'
 import Tree from './pages/tree.vue'
 import Date from './pages/date.vue'
 import InputTags from './pages/InputTags.vue'
+import RenderLessComp from './pages/renderLessComp.vue'
 
 Vue.use(Router)
 
@@ -59,6 +60,10 @@ const routes = [
   {
     path: '/input-tags',
     component: InputTags
+  },
+  {
+    path: '/render-less',
+    component: RenderLessComp
   }
 ]
 

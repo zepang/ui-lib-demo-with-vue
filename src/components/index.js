@@ -16,6 +16,7 @@ import Table from './table'
 import Tree from './tree'
 import Slider from './slider'
 import InputTags from './inputTags'
+import RenderLessComp from './inputTags/renderLessComp'
 
 export default {
   Switch,
@@ -34,5 +35,6 @@ export default {
   Alert,
   Tree,
   Slider,
-  InputTags
+  InputTags,
+  RenderLessComp
 }
