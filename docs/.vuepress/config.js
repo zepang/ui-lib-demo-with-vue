@@ -4,8 +4,8 @@ module.exports = {
   serviceWorker: false,
   themeConfig: {
     nav: [
-      { text: "Home", link: "/" },
-      { text: "documents", link: "/posts/" },
+      { text: "首页", link: "/" },
+      { text: "文档", link: "/posts/" },
       { text: "github", link: "https://github.com/zepang/lai-ui" }
     ],
     sidebar: [
