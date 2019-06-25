@@ -1,6 +1,5 @@
 module.exports = {
   base: process.env.NODE_ENV === "production" ? "/lai-ui/" : "/",
-  title: "Components Learning With Vue",
   head: [["link", { rel: "icon", href: "/img/favicon.ico" }]],
   serviceWorker: false,
   themeConfig: {
@@ -43,9 +42,5 @@ module.exports = {
     ]
   },
   configureWebpack: (config, isServer) => {
-    if (!isServer) {
-      config.output.publicPath =
-        process.env.NODE_ENV === "production" ? "/lai-ui/" : "/" 
-    }
   }
 }
