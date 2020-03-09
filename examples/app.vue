@@ -3,6 +3,7 @@
     <!-- <img class="avatar" src="../src/assets/images/cache_user_icon.jpg" alt=""> -->
     <router-view></router-view>
     <!-- <lai-button @click.native="openModal">Modal</lai-button> -->
+    <lai-button @click.native="openAlert">Alert</lai-button>
   </div>
 </template>
 
@@ -26,6 +27,12 @@ export default {
         content: '12344444'
       })
       modal.open()
+    },
+    openAlert () {
+      this.$alert({
+        content: '122334',
+        duration: 2000
+      })
     }
   }
 }

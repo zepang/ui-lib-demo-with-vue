@@ -47,7 +47,7 @@ export default {
   opacity: 0;
 }
 .slide-enter-active, .slide-leave-active {
-  transition: .25s cubic-bezier(0.4, 0, 1, 1);
+  transition: transform .25s cubic-bezier(0.4, 0, 1, 1), opacity .1s ease-in;
 }
 .slide-leave-active  {
   transition-delay: 0s !important;
